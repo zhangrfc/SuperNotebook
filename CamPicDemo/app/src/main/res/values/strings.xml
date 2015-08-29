@@ -6,4 +6,5 @@
 
     <string name="mainCam">Open Camera</string>
     <string name="mainPic">Open Picture</string>
+    <string name="title_activity_pic_word">PicWordActivity</string>
 </resources>
