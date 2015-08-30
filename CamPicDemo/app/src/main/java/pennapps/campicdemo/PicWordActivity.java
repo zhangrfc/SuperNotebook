@@ -1,11 +1,14 @@
 package pennapps.campicdemo;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import java.io.File;
 
 public class PicWordActivity extends AppCompatActivity {
 
@@ -16,9 +19,11 @@ public class PicWordActivity extends AppCompatActivity {
         // Load img from intent.
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            Bitmap bitmap = (Bitmap) extras.get("IMAGE");
+            String path = (String) extras.get("IMAGE");
+            //Bitmap bitmap = (Bitmap) extras.get("IMAGE");
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
-            imageView.setImageBitmap(bitmap);
+            Drawable d = Drawable.createFromPath(path);
+            imageView.setImageDrawable(d);
         }
     }
 
