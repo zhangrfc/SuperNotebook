@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+
+import com.googlecode.tesseract.android.TessBaseAPI;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -133,5 +136,18 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), PicWordActivity.class);
         intent.putExtra("IMAGE", mCurrentPhotoPath);
         startActivity(intent);
+    }
+
+    // Test Tesseract
+    public void tess() {
+        TessBaseAPI baseApi = new TessBaseAPI();
+        String DATA_PATH = null;
+        String lang = null;
+        Bitmap bitmap = null;
+        baseApi.init(DATA_PATH, lang);
+        baseApi.setImage(bitmap);
+        String recognizedText = baseApi.getUTF8Text();
+        baseApi.end();
+        Toast.makeText(this, recognizedText, Toast.LENGTH_LONG).show();
     }
 }
