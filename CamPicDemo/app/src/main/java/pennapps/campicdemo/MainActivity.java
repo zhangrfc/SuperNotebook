@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_TAKE_PHOTO = 1;
     private String mCurrentPhotoPath;
+    private static final String WORD_PIC_PATH = "/storage/15FC-271E/Android/data/pennapps.campicdemo/files/word.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,31 +111,26 @@ public class MainActivity extends AppCompatActivity {
             // Check if image really exist
             File image = new File(mCurrentPhotoPath);
             if (image.exists()) {
-                Log.i("image", "file exists. ");
+                Log.i("image", "file exist.");
+                Log.i("image", mCurrentPhotoPath);
             } else Log.i("image", "file does not exist. ");
-            // Get image size
-            //BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            //bmOptions.inJustDecodeBounds = true;
-            // in case image too big
-            /*
-            Bitmap bp = null;
-            try {
-                bp = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            } catch(Exception ex) {
-                Log.e("bitmap",ex.toString());
-            }
-            */
-            // Bitmap bp = (Bitmap) data.getExtras().get("data");
-
-            Intent intent = new Intent(getApplicationContext(), PicWordActivity.class);
-            intent.putExtra("IMAGE", mCurrentPhotoPath);
-            startActivity(intent);
+            // Pass the path of photo to next activity.
+            openPicWordActivity(mCurrentPhotoPath);
         }
     }
     // Test function, enter text selection mode.
     public void pic(View view) {
+        openPicWordActivity(mCurrentPhotoPath);
+    }
+
+    // Open pre-saved picture for word detection
+    public void wordPic(View view) {
+        openPicWordActivity(WORD_PIC_PATH);
+    }
+
+    public void openPicWordActivity(String imgPath) {
         Intent intent = new Intent(getApplicationContext(), PicWordActivity.class);
-        intent.putExtra("IMAGE", mCurrentPhotoPath);
+        intent.putExtra("IMAGE", imgPath);
         startActivity(intent);
     }
 

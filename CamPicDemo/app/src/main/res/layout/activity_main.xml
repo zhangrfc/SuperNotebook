@@ -22,6 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:onClick="pic" />
+    <Button android:id="@+id/wordPic"
+        android:text="@string/wordPic"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:onClick="wordPic" />
 <!-- <ImageView
         android:id="@+id/mainImg"
         android:layout_width="match_parent"

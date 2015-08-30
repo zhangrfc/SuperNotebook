@@ -5,6 +5,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="mainCam">Open Camera</string>
-    <string name="mainPic">Open Picture</string>
+    <string name="mainPic">Open Saved Picture</string>
+    <string name="wordPic">Open Picture</string>
     <string name="title_activity_pic_word">PicWordActivity</string>
 </resources>
