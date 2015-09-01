@@ -7,5 +7,10 @@
     <string name="mainCam">Open Camera</string>
     <string name="mainPic">Open Saved Picture</string>
     <string name="wordPic">Open Picture</string>
+    <string name="wordPick">Pick word from image</string>
     <string name="title_activity_pic_word">PicWordActivity</string>
+
+    <string name="title_activity_pick_word">PickWordActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

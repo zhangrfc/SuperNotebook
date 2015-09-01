@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pennapps.campicdemo" >
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <!--
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera"
@@ -26,6 +28,12 @@
         <activity
             android:name=".PicWordActivity"
             android:label="@string/title_activity_pic_word" >
+        </activity>
+        <activity
+            android:name=".PickWordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_pick_word"
+            android:theme="@style/FullscreenTheme" >
         </activity>
     </application>
 

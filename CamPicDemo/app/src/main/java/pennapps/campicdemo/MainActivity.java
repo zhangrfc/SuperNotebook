@@ -134,6 +134,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void wordPick(View view) {
+        Intent intent = new Intent(getApplicationContext(), PickWordActivity.class);
+        intent.putExtra("IMAGE", WORD_PIC_PATH);
+        startActivity(intent);
+    }
+
     // Test Tesseract
     public void tess() {
         TessBaseAPI baseApi = new TessBaseAPI();
