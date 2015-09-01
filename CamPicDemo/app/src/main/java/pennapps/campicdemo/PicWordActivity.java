@@ -33,7 +33,9 @@ public class PicWordActivity extends AppCompatActivity {
         // imageView.setImageDrawable(d);
         // Run Tessract to recognize words.
         TessBaseAPI baseAPI = new TessBaseAPI();
-        String DATA_PATH = "/storage/15FC-271E/Android/data/pennapps.campicdemo/files/"; //getDataPath();
+        //String DATA_PATH = "/storage/15FC-271E/Android/data/pennapps.campicdemo/files/"; //getDataPath();
+        String DATA_PATH = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath())
+                .getAbsolutePath() + "/";
         String lang = "eng";
         Log.i("DATA_PATH", DATA_PATH);
         baseAPI.init(DATA_PATH, lang);

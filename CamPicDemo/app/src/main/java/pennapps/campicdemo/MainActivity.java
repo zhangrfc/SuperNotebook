@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_TAKE_PHOTO = 1;
     private String mCurrentPhotoPath;
-    private static final String WORD_PIC_PATH = "/storage/15FC-271E/Android/data/pennapps.campicdemo/files/word.jpg";
+    private String WORD_PIC_PATH;
+    //private static final String WORD_PIC_PATH = "/storage/15FC-271E/Android/data/pennapps.campicdemo/files/word.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
             Log.i("camera", "This device has no camera");
         }
         setContentView(R.layout.activity_main);
+        WORD_PIC_PATH = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath())
+                .getAbsolutePath() + "/word.jpg";
+        Log.i("Dir path", WORD_PIC_PATH);
+        // Check path
+        // Toast.makeText(this,
+                //getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath(),
+                //Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -91,9 +99,10 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create a file name to avoid collision
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "/JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(null); // BitmapFactory kept returning null. Either way failes
-        return File.createTempFile(imageFileName, ".jpg", storageDir);
+        // return File.createTempFile(imageFileName, ".jpg", storageDir);
+        return new File(storageDir.getAbsolutePath() + imageFileName);
     }
 
     private void galleryAddPic() {
