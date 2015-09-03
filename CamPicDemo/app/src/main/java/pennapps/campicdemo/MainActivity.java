@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void paintDemo(View view) {
         Intent intent = new Intent(getApplicationContext(), PaintActivity.class);
+        intent.putExtra("IMAGE", WORD_PIC_PATH);
         startActivity(intent);
     }
 
