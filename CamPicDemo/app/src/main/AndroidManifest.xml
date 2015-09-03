@@ -35,6 +35,10 @@
             android:label="@string/title_activity_pick_word"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <activity
+            android:name=".PaintActivity"
+            android:label="@string/title_activity_paint" >
+        </activity>
     </application>
 
 </manifest>

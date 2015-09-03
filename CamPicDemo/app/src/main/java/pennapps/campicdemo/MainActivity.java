@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -146,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
     public void wordPick(View view) {
         Intent intent = new Intent(getApplicationContext(), PickWordActivity.class);
         intent.putExtra("IMAGE", WORD_PIC_PATH);
+        startActivity(intent);
+    }
+
+    public void paintDemo(View view) {
+        Intent intent = new Intent(getApplicationContext(), PaintActivity.class);
         startActivity(intent);
     }
 
