@@ -49,6 +49,12 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:onClick="paintDemo" />
+        <Button android:id="@+id/camPaint"
+            android:text="Cam Paint Demo"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:onClick="camPaintDemo" />
     </LinearLayout>
 <!-- <ImageView
         android:id="@+id/mainImg"

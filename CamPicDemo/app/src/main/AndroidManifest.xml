@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pennapps.campicdemo" >
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -37,6 +38,10 @@
         <activity
             android:name=".PaintActivity"
             android:label="@string/title_activity_paint" >
+        </activity>
+        <activity
+            android:name=".CamPaintActivity"
+            android:label="@string/title_activity_cam_paint" >
         </activity>
     </application>
 
