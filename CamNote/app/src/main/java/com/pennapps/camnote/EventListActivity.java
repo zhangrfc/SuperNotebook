@@ -1,17 +1,19 @@
 package com.pennapps.camnote;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
-public class MainActivity extends ActionBarActivity {
-
+/**
+ * Created by QingxiaoDong on 9/4/15.
+ */
+public class EventListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_event_list);
+
     }
 
 
