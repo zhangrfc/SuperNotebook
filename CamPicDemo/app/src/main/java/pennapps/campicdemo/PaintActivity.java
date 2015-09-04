@@ -15,6 +15,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PaintActivity extends AppCompatActivity {
 
@@ -43,7 +49,7 @@ public class PaintActivity extends AppCompatActivity {
         private Paint circlePaint;
         private Path circlePath;
         private Paint darkPaint;
-        private Path darkPath;
+        //private Path darkPath;
 
         public DrawingView(Context c) {
             super(c);
@@ -58,10 +64,10 @@ public class PaintActivity extends AppCompatActivity {
             circlePaint.setStrokeJoin(Paint.Join.MITER);
             circlePaint.setStrokeWidth(4f);
 
+            // Paint for transparent layer.
             darkPaint = new Paint();
-            darkPath = new Path();
             darkPaint.setColor(Color.BLACK);
-            darkPaint.setAlpha(200);
+            darkPaint.setAlpha(150);
             darkPaint.setStrokeWidth(60);
         }
 
@@ -79,10 +85,7 @@ public class PaintActivity extends AppCompatActivity {
 
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 
-            canvas.drawPath( mPath,  mPaint);
-
-            // dark transparent
-            //canvas.drawPath(darkPath, darkPaint);
+            //canvas.drawPath( mPath,  mPaint);
 
             canvas.drawPath(circlePath, circlePaint);
 
@@ -91,29 +94,22 @@ public class PaintActivity extends AppCompatActivity {
 
         private float mX, mY;
         private static final float TOUCH_TOLERANCE = 4;
-        private RelativeLayout blackTransparent;
+        private Bitmap canvasBitmap;
 
         private void touch_start(float x, float y) {
-            //mBitmapPaint.setColor(0xFFFFFFFF);
-            //mBitmapPaint.setAlpha(200);
-            //this.setBackgroundColor(0xFFFFFFFF);
-/*            blackTransparent = new RelativeLayout(context);
-            RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-            blackTransparent.setBackgroundColor(0x00000000);
-            blackTransparent.setAlpha((float) 0.8);
-            addContentView(blackTransparent, rlp);*/
-            //Point size = new Point();
-            //Display display = getWindowManager().getDefaultDisplay();
-            //display.getRealSize(size);
-            //darkPath.addRect(0, 0, size.x, size.y, Path.Direction.CW);
+            // Restore
+            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            // Save to a new bitmap.
+            canvasBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(),
+                    Bitmap.Config.ARGB_8888);
+            mCanvas.setBitmap(canvasBitmap);
+            // Draw transparent layer
             Point size = new Point();
             Display display = getWindowManager().getDefaultDisplay();
             display.getRealSize(size);
             RectF rect = new RectF(0, 0, size.x, size.y);
             mCanvas.drawRect(rect, darkPaint);
-
+            // Reset path
             mPath.reset();
             mPath.moveTo(x, y);
             mX = x;
@@ -124,25 +120,57 @@ public class PaintActivity extends AppCompatActivity {
             float dy = Math.abs(y - mY);
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
                 mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
-                //darkPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
                 mX = x;
                 mY = y;
-
+                // works fine on device, so they spoke
+                mPath.lineTo(mX, mY);
+                mCanvas.drawPath(mPath, mPaint);
+                //mPath.reset();
+                mPath.moveTo(mX, mY);
+                // update circle, following finger touch.
                 circlePath.reset();
                 circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
                 Log.i("touch location", "x:" + mX + ", y: " + mY);
             }
         }
         private void touch_up() {
-            mPath.lineTo(mX, mY);
+            // mPath.lineTo(mX, mY); // commit out on device
             circlePath.reset();
-            //darkPath.reset();
+            // Save bitmap
+            String DATA_PATH = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath())
+                    .getAbsolutePath();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = "/PNG_" + timeStamp + ".png";
+            File file = new File(DATA_PATH + imageFileName);
+            // draw background img
+            mCanvas.drawBitmap(((BitmapDrawable) this.getBackground()).getBitmap(), 0, 0, null);
+            // retrieve picked region
+            Paint retrievePaint = new Paint();
+            retrievePaint.setAntiAlias(true);
+            retrievePaint.setDither(true);
+            retrievePaint.setColor(Color.WHITE);
+            retrievePaint.setStyle(Paint.Style.STROKE);
+            retrievePaint.setStrokeJoin(Paint.Join.ROUND);
+            retrievePaint.setStrokeCap(Paint.Cap.ROUND);
+            retrievePaint.setStrokeWidth(60);
+            retrievePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN)); // remain only src.
+            mCanvas.drawPath(mPath, retrievePaint);
+
+            try {
+                canvasBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // Find Covered area by path.
+            RectF rectF = new RectF();
+            mPath.computeBounds(rectF, true);
+            float offset = 30;
+            rectF.set(rectF.left-offset, rectF.top-offset, rectF.right+offset, rectF.bottom+offset);
+            mCanvas.drawRect(rectF, circlePaint);
             // commit the path to our offscreen
-            mCanvas.drawPath(mPath, mPaint);
+            // mCanvas.drawPath(mPath, mPaint); // commit out on device
             // kill this so we don't double draw
             mPath.reset();
-
-            //mBitmapPaint.setAlpha(0);
         }
 
         @Override
@@ -180,7 +208,7 @@ public class PaintActivity extends AppCompatActivity {
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         //mPaint.setColor(Color.GREEN);
-        mPaint.setAlpha(0);
+        mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
