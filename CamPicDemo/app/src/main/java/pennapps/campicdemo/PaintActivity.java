@@ -12,6 +12,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -81,9 +82,11 @@ public class PaintActivity extends AppCompatActivity {
             canvas.drawPath( mPath,  mPaint);
 
             // dark transparent
-            canvas.drawPath( darkPath, darkPaint);
+            //canvas.drawPath(darkPath, darkPaint);
 
-            canvas.drawPath( circlePath,  circlePaint);
+            canvas.drawPath(circlePath, circlePaint);
+
+
         }
 
         private float mX, mY;
@@ -101,10 +104,16 @@ public class PaintActivity extends AppCompatActivity {
             blackTransparent.setBackgroundColor(0x00000000);
             blackTransparent.setAlpha((float) 0.8);
             addContentView(blackTransparent, rlp);*/
+            //Point size = new Point();
+            //Display display = getWindowManager().getDefaultDisplay();
+            //display.getRealSize(size);
+            //darkPath.addRect(0, 0, size.x, size.y, Path.Direction.CW);
             Point size = new Point();
             Display display = getWindowManager().getDefaultDisplay();
             display.getRealSize(size);
-            darkPath.addRect(0, 0, size.x, size.y, Path.Direction.CW);
+            RectF rect = new RectF(0, 0, size.x, size.y);
+            mCanvas.drawRect(rect, darkPaint);
+
             mPath.reset();
             mPath.moveTo(x, y);
             mX = x;
@@ -127,7 +136,7 @@ public class PaintActivity extends AppCompatActivity {
         private void touch_up() {
             mPath.lineTo(mX, mY);
             circlePath.reset();
-            darkPath.reset();
+            //darkPath.reset();
             // commit the path to our offscreen
             mCanvas.drawPath(mPath, mPaint);
             // kill this so we don't double draw
