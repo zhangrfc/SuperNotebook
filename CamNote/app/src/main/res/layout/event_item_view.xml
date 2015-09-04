@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="50dp"
+    android:id="@+id/event_item"
+    android:background="@drawable/item_color">
+
+    <TextView
+        android:id="@+id/event_name"
+        android:paddingTop="2dp"
+        android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/abc_text_size_body_1_material"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/event_date"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="2dp"
+        android:paddingRight="@dimen/abc_dropdownitem_text_padding_left"
+        android:layout_toRightOf="@+id/event_name"
+        android:textSize="@dimen/abc_text_size_small_material"
+        android:textStyle="italic"
+        android:gravity="right|center_vertical" />
+
+</RelativeLayout>
