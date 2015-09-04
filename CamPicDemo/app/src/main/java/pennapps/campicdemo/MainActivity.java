@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create a file name to avoid collision
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "/JPEG_" + timeStamp + "_";
+        String imageFileName = "/JPEG_" + timeStamp + ".jpg";
         File storageDir = getExternalFilesDir(null); // BitmapFactory kept returning null. Either way failes
         // return File.createTempFile(imageFileName, ".jpg", storageDir);
         return new File(storageDir.getAbsolutePath() + imageFileName);
