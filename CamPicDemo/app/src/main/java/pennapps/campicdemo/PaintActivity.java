@@ -103,6 +103,7 @@ public class PaintActivity extends AppCompatActivity {
         private int barHeight;
         private static final float offset = 30;
         private Drawable backgroundDrawable;
+        private String pngPath = null;
 
         public void setBackgroundDrawable(Drawable bitmapDrawable,
                                           boolean custom) {
@@ -190,6 +191,15 @@ public class PaintActivity extends AppCompatActivity {
         }
 
         private void touch_up() {
+            // Remove old file
+            if (pngPath != null) {
+                File toDeleteFile = new File(pngPath);
+                boolean success = toDeleteFile.delete();
+                if (success)
+                    Log.i("DELETE FILE", "success");
+                else
+                    Log.i("DELETE FILE", "failed");
+            }
             // mPath.lineTo(mX, mY); // commit out on device
             circlePath.reset();
             // draw black
@@ -221,7 +231,7 @@ public class PaintActivity extends AppCompatActivity {
             // test canvas bitmap
             // String pngPath = print_png();
             // uncropped bitmap
-            String rec_text = recognize_text(canvasBitmap);
+            // String rec_text = recognize_text(canvasBitmap);
             // Display Found Covered area by path.
             RectF rectF = new RectF();
             mPath.computeBounds(rectF, true);
@@ -233,7 +243,7 @@ public class PaintActivity extends AppCompatActivity {
                     (int)(rectF.right - rectF.left),
                     (int)(rectF.bottom - rectF.top));
             // cropped bitmap.
-            String pngPath = print_png();
+            pngPath = print_png();
             rec_text = recognize_text(canvasBitmap);
             // commit the path to our offscreen
             // mCanvas.drawPath(mPath, mPaint); // commit out on device
@@ -245,7 +255,7 @@ public class PaintActivity extends AppCompatActivity {
             float left = rectF.left - offset;
             float right = rectF.right + offset;
             float top = rectF.top - offset;
-            float bottom = rectF.top + offset;
+            float bottom = rectF.bottom + offset;
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
