@@ -1,6 +1,5 @@
 package pennapps.campicdemo;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -26,6 +26,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -95,18 +98,39 @@ public class PaintActivity extends AppCompatActivity {
         private float mX, mY;
         private static final float TOUCH_TOLERANCE = 4;
         private Bitmap canvasBitmap;
+        private Canvas saveImageCanvas;
+        private int scaledWidth, scaledHeight;
+        private int barHeight;
+        private static final float offset = 30;
+        private Drawable backgroundDrawable;
+
+        public void setBackgroundDrawable(Drawable bitmapDrawable,
+                                          boolean custom) {
+            backgroundDrawable = bitmapDrawable;
+            Point size = new Point();
+            Display display = getWindowManager().getDefaultDisplay();
+            display.getRealSize(size);
+            Drawable backgroundImg = resizeDrawable(bitmapDrawable, size);
+            setBackgroundDrawable(backgroundImg);
+            int width = size.x;
+            int height = size.y;
+            scaledWidth = width;
+            scaledHeight = height;
+            Log.i("setBackGround", String.format("Width and Height set" + scaledHeight));
+        }
 
         private void touch_start(float x, float y) {
             // Restore
             mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             // Save to a new bitmap.
-            canvasBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(),
+            canvasBitmap = Bitmap.createBitmap(scaledWidth, scaledHeight,
                     Bitmap.Config.ARGB_8888);
-            mCanvas.setBitmap(canvasBitmap);
+            saveImageCanvas = new Canvas();
+            saveImageCanvas.setBitmap(canvasBitmap);
             // Draw transparent layer
             Point size = new Point();
             Display display = getWindowManager().getDefaultDisplay();
-            display.getRealSize(size);
+            display.getSize(size);
             RectF rect = new RectF(0, 0, size.x, size.y);
             mCanvas.drawRect(rect, darkPaint);
             // Reset path
@@ -133,17 +157,44 @@ public class PaintActivity extends AppCompatActivity {
                 Log.i("touch location", "x:" + mX + ", y: " + mY);
             }
         }
-        private void touch_up() {
-            // mPath.lineTo(mX, mY); // commit out on device
-            circlePath.reset();
+
+        private String print_png() {
             // Save bitmap
             String DATA_PATH = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath())
                     .getAbsolutePath();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ").format(new Date());
             String imageFileName = "/PNG_" + timeStamp + ".png";
             File file = new File(DATA_PATH + imageFileName);
-            // draw background img
-            mCanvas.drawBitmap(((BitmapDrawable) this.getBackground()).getBitmap(), 0, 0, null);
+            // output image
+            try {
+                canvasBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+                return file.getAbsolutePath();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        private String recognize_text(Bitmap bitmap) {
+            TessBaseAPI baseAPI = new TessBaseAPI();
+            String DATA_PATH = getExternalFilesDir(Environment.getDataDirectory()
+                    .getAbsolutePath()).getAbsolutePath() + "/";
+            String lang = "eng";
+            baseAPI.init(DATA_PATH, lang);
+            baseAPI.setImage(bitmap);
+            String recognizedText = baseAPI.getUTF8Text();
+            Log.i("RECOG_TEXT", recognizedText);
+            Toast.makeText(this.context, recognizedText, Toast.LENGTH_LONG).show();
+            baseAPI.end();
+            return recognizedText;
+        }
+
+        private void touch_up() {
+            // mPath.lineTo(mX, mY); // commit out on device
+            circlePath.reset();
+            // draw black
+            saveImageCanvas.drawColor(Color.BLACK);
+            // pick out black region
             // retrieve picked region
             Paint retrievePaint = new Paint();
             retrievePaint.setAntiAlias(true);
@@ -153,25 +204,60 @@ public class PaintActivity extends AppCompatActivity {
             retrievePaint.setStrokeJoin(Paint.Join.ROUND);
             retrievePaint.setStrokeCap(Paint.Cap.ROUND);
             retrievePaint.setStrokeWidth(60);
-            retrievePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN)); // remain only src.
-            mCanvas.drawPath(mPath, retrievePaint);
-
-            try {
-                canvasBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Find Covered area by path.
+            retrievePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR)); // remain only src.
+            saveImageCanvas.drawPath(mPath, retrievePaint);
+            // draw background img
+            retrievePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)); // remain only src.
+            // Get background img and resize to displaysize.
+            // instead of realsize, which might be larger.
+            Point size = new Point();
+            Display display = getWindowManager().getDefaultDisplay();
+            display.getSize(size);
+            Bitmap backgroundBitmap = resizeBitmap(
+                    ((BitmapDrawable)backgroundDrawable).getBitmap(),
+                    size);
+            saveImageCanvas.drawBitmap(backgroundBitmap,
+                    0, 0, retrievePaint); // Offset
+            // test canvas bitmap
+            // String pngPath = print_png();
+            // uncropped bitmap
+            String rec_text = recognize_text(canvasBitmap);
+            // Display Found Covered area by path.
             RectF rectF = new RectF();
             mPath.computeBounds(rectF, true);
-            float offset = 30;
-            rectF.set(rectF.left-offset, rectF.top-offset, rectF.right+offset, rectF.bottom+offset);
+            rectF = getRectWithOffset(rectF, offset);
             mCanvas.drawRect(rectF, circlePaint);
+            // crop bitmap
+            canvasBitmap = Bitmap.createBitmap(canvasBitmap,
+                    (int)rectF.left, (int)rectF.top,
+                    (int)(rectF.right - rectF.left),
+                    (int)(rectF.bottom - rectF.top));
+            // cropped bitmap.
+            String pngPath = print_png();
+            rec_text = recognize_text(canvasBitmap);
             // commit the path to our offscreen
             // mCanvas.drawPath(mPath, mPaint); // commit out on device
             // kill this so we don't double draw
             mPath.reset();
         }
+
+        private RectF getRectWithOffset(RectF rectF, float offset) {
+            float left = rectF.left - offset;
+            float right = rectF.right + offset;
+            float top = rectF.top - offset;
+            float bottom = rectF.top + offset;
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            if (left < 0) left = 0;
+            if (top < 0) top = 0;
+            if (right > size.x) right = size.x;
+            if (bottom > size.y) bottom = size.y;
+            RectF result = rectF;
+            result.set(left, top, right, bottom);
+            return result;
+        }
+
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
@@ -196,7 +282,14 @@ public class PaintActivity extends AppCompatActivity {
         }
     }
 
-
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +307,12 @@ public class PaintActivity extends AppCompatActivity {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(60);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-
+        // Hide action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+        // Get status bar height
+        int barHeight = getStatusBarHeight();
+        Log.i("BarHeight", Integer.toString(barHeight));
         // load img
         Bundle extras = getIntent().getExtras();
         if (extras == null) return;
@@ -222,29 +320,30 @@ public class PaintActivity extends AppCompatActivity {
         Drawable backgroundImg = Drawable.createFromPath(path);
         // Resize img
         if (backgroundImg != null) {
-            Bitmap bitmap = ((BitmapDrawable) backgroundImg).getBitmap();
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            Point size = new Point();
-            Display display = getWindowManager().getDefaultDisplay();
-            display.getRealSize(size);
-            int newWidth = size.x;
-            int newHeight = size.y;
-            float scaleWidth = ((float) newWidth) / width;
-            float scaleHeight = ((float) newHeight) / height;
-            Matrix matrix = new Matrix();
-            matrix.postScale(scaleWidth, scaleHeight);
-            Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-            backgroundImg = new BitmapDrawable(resizedBitmap);
+            dv.setBackgroundDrawable(backgroundImg, true);
         }
-        // Create a relative layout to display image in background.
-//        RelativeLayout backgroundImgLayout = new RelativeLayout(this);
-//        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
-//                RelativeLayout.LayoutParams.MATCH_PARENT,
-//                RelativeLayout.LayoutParams.MATCH_PARENT);
-//        addContentView(backgroundImgLayout, rlp);
-//        backgroundImgLayout.setBackground(backgroundImg);
-        dv.setBackgroundDrawable(backgroundImg);
+    }
+
+    private Bitmap resizeBitmap(Bitmap bitmap, Point newSize) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int newWidth = newSize.x;
+        int newHeight = newSize.y;
+        Log.i("RESIZE_BITMAP", String.format("Old size: " + width + ", "
+            +height + ", new size: " + newWidth + ", " + newHeight));
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(bitmap, 0, 0,
+                width, height, matrix, true);
+    }
+
+    private Drawable resizeDrawable(Drawable drawable, Point newSize) {
+        if (drawable == null) return null;
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        Bitmap resizedBitmap = resizeBitmap(bitmap, newSize);
+        return new BitmapDrawable(resizedBitmap);
     }
 
     @Override
