@@ -4,6 +4,7 @@ package com.pennapps.camnote;
  * Created by zhangrf on 2015/9/5.
  */
 public class Note {
+    public String NOTE_COLUMN_ID = "note_id";
     public String NOTE_COLUMN_TITLE = "title";
     public String NOTE_COLUMN_CONTEXT = "context";
     public String NOTE_COLUMN_TIME = "time";

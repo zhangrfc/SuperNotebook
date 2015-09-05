@@ -5,11 +5,10 @@ package com.pennapps.camnote;
  */
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +16,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DisplayNote extends Activity {
+public class DisplayNote extends ActionBarActivity {
     int from_Where_I_Am_Coming = 0;
-    private SuperNotebookDBHelper mydb ;
+    private InstaNotebookDBHelper mydb ;
 
     TextView title ;
     TextView context;
@@ -46,7 +45,7 @@ public class DisplayNote extends Activity {
         picture = (TextView) findViewById(R.id.editText7);
         category = (TextView) findViewById(R.id.editText8);
 
-        mydb = new SuperNotebookDBHelper(this);
+        mydb = new InstaNotebookDBHelper(this);
 
         Bundle extras = getIntent().getExtras();
         if(extras !=null)
@@ -59,14 +58,14 @@ public class DisplayNote extends Activity {
                 id_To_Update = Value;
                 rs.moveToFirst();
 
-                String title_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_TITLE));
-                String context_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_CONTEXT));
-                String time_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_TIME));
-                String date_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_DATE));
-                String host_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_HOST));
-                String address_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_ADDRESS));
-                String picture_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_PICTURE));
-                String category_str = rs.getString(rs.getColumnIndex(SuperNotebookDBHelper.NOTE_COLUMN_CATEGORY));
+                String title_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_TITLE));
+                String context_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_CONTEXT));
+                String time_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_TIME));
+                String date_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_DATE));
+                String host_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_HOST));
+                String address_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_ADDRESS));
+                String picture_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_PICTURE));
+                String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_CATEGORY));
 
                 if (!rs.isClosed())
                 {

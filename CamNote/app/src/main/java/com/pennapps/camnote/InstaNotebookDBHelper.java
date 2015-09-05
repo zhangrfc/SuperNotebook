@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by zhangrf on 2015/9/5.
  */
-public class SuperNotebookDBHelper extends SQLiteOpenHelper {
+public class InstaNotebookDBHelper extends SQLiteOpenHelper {
 
     /*Global variable for the database table*/
     public static final String DATABASE_NAME = "SuperNotebook.db";
@@ -28,7 +28,7 @@ public class SuperNotebookDBHelper extends SQLiteOpenHelper {
     public static final String NOTE_COLUMN_CATEGORY = "category";
 
     /*Constructor*/
-    public SuperNotebookDBHelper(Context context) {
+    public InstaNotebookDBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
@@ -52,6 +52,12 @@ public class SuperNotebookDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + NOTE_TABLE_NAME);
         onCreate(db);
+    }
+
+    public boolean clearAll() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(NOTE_TABLE_NAME, null, null);
+        return true;
     }
 
     public boolean insertNote (String title, String context, String time, String date,
@@ -113,6 +119,7 @@ public class SuperNotebookDBHelper extends SQLiteOpenHelper {
 
         while(res.isAfterLast() == false){
             Note note = new Note();
+            note.NOTE_COLUMN_ID = res.getString(res.getColumnIndex(NOTE_COLUMN_ID));
             note.NOTE_COLUMN_TITLE = res.getString(res.getColumnIndex(NOTE_COLUMN_TITLE));
             note.NOTE_COLUMN_CONTEXT = res.getString(res.getColumnIndex(NOTE_COLUMN_CONTEXT));
             note.NOTE_COLUMN_TIME = res.getString(res.getColumnIndex(NOTE_COLUMN_TIME));
