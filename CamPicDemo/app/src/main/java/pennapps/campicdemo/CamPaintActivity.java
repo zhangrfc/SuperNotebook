@@ -1,6 +1,7 @@
 package pennapps.campicdemo;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -190,8 +191,10 @@ public class CamPaintActivity extends AppCompatActivity {
             Point size = new Point();
             Display display = getWindowManager().getDefaultDisplay();
             display.getSize(size);
-
-            // Try 
+            // Try hard code size as 1700.
+            size.y = 1700;
+            Log.i("SIZE",
+                    "Size of display w/o bar" + size.x + " " + (size.y - getNavBarHeight()));
 
             Bitmap backgroundBitmap = resizeBitmap(
                     ((BitmapDrawable) backgroundDrawable).getBitmap(),
@@ -213,6 +216,15 @@ public class CamPaintActivity extends AppCompatActivity {
             String rec_text = recognize_text(canvasBitmap);
             // Reset out path
             mPath.reset();
+        }
+
+        public int getNavBarHeight() {
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                return resources.getDimensionPixelSize(resourceId);
+            }
+            return 0;
         }
 
         public void setBackgroundDrawable(Drawable bitmapDrawable,
@@ -319,8 +331,9 @@ public class CamPaintActivity extends AppCompatActivity {
         float scaleHeight = ((float) newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(bitmap, 0, 0,
-                width, height, matrix, true);
+        //return Bitmap.createBitmap(bitmap, 0, 0,
+//                width, height, matrix, true);
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
     }
 
     private Drawable resizeDrawable(Drawable drawable, Point newSize) {

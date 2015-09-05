@@ -223,15 +223,13 @@ public class PaintActivity extends AppCompatActivity {
             Point size = new Point();
             Display display = getWindowManager().getDefaultDisplay();
             display.getSize(size);
+            // Try hard code size height.
+            size.y = 1700;
             Bitmap backgroundBitmap = resizeBitmap(
                     ((BitmapDrawable)backgroundDrawable).getBitmap(),
                     size);
             saveImageCanvas.drawBitmap(backgroundBitmap,
                     0, 0, retrievePaint); // Offset
-            // test canvas bitmap
-            // String pngPath = print_png();
-            // uncropped bitmap
-            // String rec_text = recognize_text(canvasBitmap);
             // Display Found Covered area by path.
             RectF rectF = new RectF();
             mPath.computeBounds(rectF, true);
