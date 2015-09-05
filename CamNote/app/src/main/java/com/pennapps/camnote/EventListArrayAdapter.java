@@ -1,6 +1,7 @@
 package com.pennapps.camnote;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by QingxiaoDong on 9/4/15.
  */
-public class EventListArrayAdapter extends ArrayAdapter<EventItem> {
+public class EventListArrayAdapter extends ArrayAdapter<EventItem> implements UndoAdapter {
 
     private final Context mContext;
 
@@ -58,5 +61,21 @@ public class EventListArrayAdapter extends ArrayAdapter<EventItem> {
             games.add(this.getItem(i));
         }
         return games;
+    }
+
+    @NonNull
+    @Override
+    public View getUndoView(final int position, final View convertView, @NonNull final ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.undo_row, parent, false);
+        }
+        return view;
+    }
+
+    @NonNull
+    @Override
+    public View getUndoClickView(@NonNull View view) {
+        return view.findViewById(R.id.undo_row_undobutton);
     }
 }

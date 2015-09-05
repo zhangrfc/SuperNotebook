@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".EventListFragment">
 
-    <ListView
+    <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
         android:id="@+id/list_view_events"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
