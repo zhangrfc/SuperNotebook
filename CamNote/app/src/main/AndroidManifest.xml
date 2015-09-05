@@ -35,6 +35,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".EditActivity"
+            android:label="Edit" >
+            <intent-filter>
+                <action android:name="android.intent.action.Main" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".CamPaintActivity"
             android:label="@string/title_activity_cam_paint" >
         </activity>

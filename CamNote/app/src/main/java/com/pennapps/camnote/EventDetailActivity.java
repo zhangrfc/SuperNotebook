@@ -1,5 +1,6 @@
 package com.pennapps.camnote;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -32,6 +33,10 @@ public class EventDetailActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_edit) {
+            Intent editIntent = new Intent(EventDetailActivity.this, EditActivity.class);
+            startActivity(editIntent);
+        }
 
 
         return super.onOptionsItemSelected(item);

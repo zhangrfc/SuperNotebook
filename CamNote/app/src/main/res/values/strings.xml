@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cam Note</string>
+    <string name="app_name">InstaNote</string>
     <string name="select_course">Courses</string>
     <string name="select_activity">Activities</string>
     <string name="select_infosession">Info Sessions</string>

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/bowen/work/android/SuperNotebook/CamNote/libraries/Android-ImageMagick/src/main/assets"/></dataSet><dataSet config="debug"><source path="/Users/bowen/work/android/SuperNotebook/CamNote/libraries/Android-ImageMagick/src/debug/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/QingxiaoDong/GitHub/SuperNotebook/CamNote/libraries/Android-ImageMagick/src/main/assets"/></dataSet><dataSet config="debug"><source path="/Users/QingxiaoDong/GitHub/SuperNotebook/CamNote/libraries/Android-ImageMagick/src/debug/assets"/></dataSet></merger>
