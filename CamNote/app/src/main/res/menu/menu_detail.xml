@@ -2,10 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
-    <item android:id="@+id/action_sort"
-        android:title="Sort"
-        android:orderInCategory="1"
+    <item android:id="@+id/action_share"
+        android:title="Share"
+        android:icon="@drawable/ic_action_share"
+        android:orderInCategory="2"
         app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_edit"
+        android:title="Edit"
+        android:icon="@drawable/ic_action_edit"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_about"
