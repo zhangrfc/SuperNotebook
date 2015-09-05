@@ -23,10 +23,6 @@ public class EventDetailFragment extends Fragment {
     InstaNotebookDBHelper inDB;
 
     ImageView pic;
-    TextView name;
-    TextView date;
-    TextView location;
-    TextView description;
 
     public EventDetailFragment(){
 
@@ -54,15 +50,15 @@ public class EventDetailFragment extends Fragment {
         String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_CATEGORY));
 
 
-        name = (TextView) getActivity().findViewById(R.id.item_name);
-        date = (TextView) getActivity().findViewById(R.id.item_date);
-        location = (TextView) getActivity().findViewById(R.id.item_location);
-        description = (TextView) getActivity().findViewById(R.id.item_description);
+        TextView name = (TextView) rootView.findViewById(R.id.item_name);
+        TextView date = (TextView) rootView.findViewById(R.id.item_date);
+        TextView location = (TextView) rootView.findViewById(R.id.item_location);
+        TextView description = (TextView) rootView.findViewById(R.id.item_description);
 
-        //name.setText((CharSequence)title_str);
-        //date.setText((CharSequence)date_str);
-        //location.setText((CharSequence)address_str);
-        //description.setText((CharSequence)context_str);
+        name.setText((CharSequence) title_str);
+        date.setText((CharSequence)date_str);
+        location.setText((CharSequence)address_str);
+        description.setText((CharSequence)context_str);
 
         return rootView;
     }
