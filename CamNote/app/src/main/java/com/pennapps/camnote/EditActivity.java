@@ -32,7 +32,13 @@ public class EditActivity extends ActionBarActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete){
 
+        }
+
+        if (id == R.id.action_done) {
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

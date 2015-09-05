@@ -3,4 +3,5 @@
     <item name="blue" type="color">#03A9F4</item>
     <item name="pressed" type="color">#81D4FA</item>
     <item name="ripple" type="color">#B3E5FC</item>
+    <item name="gray" type="color">#616161</item>
 </resources>
