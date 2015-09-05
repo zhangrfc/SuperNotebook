@@ -223,7 +223,7 @@ public class CamPaintActivity extends AppCompatActivity{
                     (int) (rectF.right - rectF.left),
                     (int) (rectF.bottom - rectF.top));
             // cropped bitmap.
-            pngPath = print_png();
+            pngPath = print_png(canvasBitmap);
             String rec_text = recognize_text(canvasBitmap);
             // Reset out path
             mPath.reset();
@@ -253,7 +253,7 @@ public class CamPaintActivity extends AppCompatActivity{
             Log.i("setBackGround", String.format("Width and Height set" + scaledHeight));
         }
 
-        private String print_png() {
+        private String print_png(Bitmap bitmap) {
             // Save bitmap
             String DATA_PATH = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath())
                     .getAbsolutePath();
@@ -262,7 +262,7 @@ public class CamPaintActivity extends AppCompatActivity{
             File file = new File(DATA_PATH + imageFileName);
             // output image
             try {
-                canvasBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
                 return file.getAbsolutePath();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -276,12 +276,17 @@ public class CamPaintActivity extends AppCompatActivity{
                     .getAbsolutePath()).getAbsolutePath() + "/";
             String lang = "eng";
             baseAPI.init(DATA_PATH, lang);
+
+            // get clearer bitmap
+            bitmap = textcleaner(bitmap);
+            print_png(bitmap);
+
             baseAPI.setImage(bitmap);
             String recognizedText = baseAPI.getUTF8Text();
             Log.i("RECOG_TEXT", recognizedText);
             Toast.makeText(this.context, recognizedText, Toast.LENGTH_LONG).show();
             baseAPI.end();
-            check_spelling(recognizedText);
+            //check_spelling(recognizedText);
             return recognizedText;
         }
 
@@ -427,26 +432,17 @@ public class CamPaintActivity extends AppCompatActivity{
     private Bitmap textcleaner(Bitmap bitmap) {
         try {
             MagickImage magickImage = MagickBitmap.fromBitmap(bitmap);
+            boolean result;
             // convert to grayscale
             magickImage.setGrayscale();
-            saveMagickImageToFile(magickImage, "gray scale");
             // enhance stretch, constrast sharpen
-            magickImage.contrastImage(true);
-            saveMagickImageToFile(magickImage, "contrast image");
-            // filter size, clean background
-            magickImage.medianFilterImage(15);
-            saveMagickImageToFile(magickImage, "median filter");
-            // or
-            magickImage.reduceNoiseImage(15);
-            saveMagickImageToFile(magickImage, "reduce noise");
-            // cant find offset
+            result = magickImage.contrastImage(true);
+            // enhance
+            magickImage = magickImage.enhanceImage();
+            // normalize
+            result = magickImage.normalizeImage();
             // sharpen
-            magickImage.sharpenImage(1, 1);
-            saveMagickImageToFile(magickImage, "sharpen image");
-            // trim
-            magickImage.trimImage();
-            saveMagickImageToFile(magickImage, "trim image");
-
+            magickImage = magickImage.sharpenImage(1, 1);
             return MagickBitmap.ToBitmap(magickImage);
         } catch (Exception e) {
             e.printStackTrace();
