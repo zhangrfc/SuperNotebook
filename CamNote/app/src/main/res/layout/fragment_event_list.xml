@@ -14,7 +14,7 @@
         android:paddingRight="0dp" />
 
     <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/sort_fab"
+        android:id="@+id/camera_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
