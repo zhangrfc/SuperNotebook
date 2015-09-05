@@ -26,24 +26,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.textservice.SentenceSuggestionsInfo;
-import android.view.textservice.SpellCheckerSession;
-import android.view.textservice.SuggestionsInfo;
-import android.view.textservice.TextInfo;
-import android.view.textservice.TextServicesManager;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
-import magick.ExceptionType;
-import magick.ImageInfo;
-import magick.Magick;
 import magick.MagickImage;
 import magick.util.MagickBitmap;
 
@@ -51,8 +50,10 @@ public class CamPaintActivity extends ActionBarActivity {
 
     DrawingView dv;
     private Paint mPaint;
+    private Stack<String> strStack;
+    private HashMap<String, String> idStrHashMap;
 
-    public class DrawingView extends View implements SpellCheckerSession.SpellCheckerSessionListener {
+    public class DrawingView extends View {
         private Bitmap mBitmap;
         private Canvas mCanvas;
         private Path mPath;
@@ -69,7 +70,9 @@ public class CamPaintActivity extends ActionBarActivity {
         private int scaledWidth, scaledHeight;
         private static final float offset = 30;
         private Drawable backgroundDrawable;
-        private String pngPath = null;
+        // private String pngPath = null;
+        private String recognizedText = null;
+        private boolean isRecDone = false;
 
         public DrawingView(Context c) {
             super(c);
@@ -89,6 +92,8 @@ public class CamPaintActivity extends ActionBarActivity {
             darkPaint.setColor(Color.BLACK);
             darkPaint.setAlpha(150);
             darkPaint.setStrokeWidth(60);
+
+            idStrHashMap = new HashMap<String, String>();
         }
 
         @Override
@@ -173,6 +178,7 @@ public class CamPaintActivity extends ActionBarActivity {
 
         private void touch_up() {
             // Remove old file
+            /*
             if (pngPath != null) {
                 File toDeleteFile = new File(pngPath);
                 boolean success = toDeleteFile.delete();
@@ -181,6 +187,7 @@ public class CamPaintActivity extends ActionBarActivity {
                 else
                     Log.i("DELETE FILE", "failed");
             }
+            */
             // reset brush icon.
             circlePath.reset();
             // Start filtering out chosen words.
@@ -206,7 +213,7 @@ public class CamPaintActivity extends ActionBarActivity {
             Display display = getWindowManager().getDefaultDisplay();
             display.getSize(size);
             // Try hard code size as 1700.
-            size.y = 1700;
+            size.y = 1530;
             Log.i("SIZE",
                     "Size of display w/o bar" + size.x + " " + (size.y - getNavBarHeight()));
 
@@ -226,8 +233,9 @@ public class CamPaintActivity extends ActionBarActivity {
                     (int) (rectF.right - rectF.left),
                     (int) (rectF.bottom - rectF.top));
             // cropped bitmap.
-            pngPath = print_png(canvasBitmap);
-            String rec_text = recognize_text(canvasBitmap);
+            // String pngPath = print_png(canvasBitmap);
+            recognizedText = recognize_text(canvasBitmap);
+            isRecDone = true;
             // Reset out path
             mPath.reset();
         }
@@ -293,16 +301,6 @@ public class CamPaintActivity extends ActionBarActivity {
             return recognizedText;
         }
 
-        private void check_spelling(String string) {
-            fetchSuggestionsFor(string);
-        }
-
-        private String onGetSpellingCheck(String resultString) {
-            Log.i("SPELL CHECK", resultString);
-            Toast.makeText(this.context, resultString, Toast.LENGTH_LONG).show();
-            return resultString;
-        }
-
         private RectF getRectWithOffset(RectF rectF, float offset) {
             float left = rectF.left - offset;
             float right = rectF.right + offset;
@@ -320,47 +318,18 @@ public class CamPaintActivity extends ActionBarActivity {
             return result;
         }
 
-        // SpellCheckerClient
-        @Override
-        public void onGetSuggestions(SuggestionsInfo[] results) {
-
+        public String getRecognizedText() {
+            return recognizedText;
         }
 
-        @Override
-        public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
-            final StringBuffer sb = new StringBuffer("");
-            for (SentenceSuggestionsInfo result : results) {
-                int n = result.getSuggestionsCount();
-                for (int i = 0; i < n; i++) {
-                    int m = result.getSuggestionsInfoAt(i).getSuggestionsCount();
-
-                    if ((result.getSuggestionsInfoAt(i).getSuggestionsAttributes() &
-                            SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO) != SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO)
-                        continue;
-
-                    for (int k = 0; k < m; k++) {
-                        sb.append(result.getSuggestionsInfoAt(i).getSuggestionAt(k))
-                                .append("\n");
-                    }
-                    sb.append("\n");
-                }
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onGetSpellingCheck(sb.toString());
-                }
-            });
+        public boolean isRecogDone() {
+            return isRecDone;
         }
 
-        public void fetchSuggestionsFor(String input) {
-            TextServicesManager tsm =
-                    (TextServicesManager) getSystemService(TEXT_SERVICES_MANAGER_SERVICE);
-            SpellCheckerSession session =
-                    tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, true);
-            session.getSentenceSuggestions(new TextInfo[]{new TextInfo(input)}, 5);
+        public void resetRecogDone() {
+            isRecDone = false;
         }
+
     }
 
     @Override
@@ -378,9 +347,16 @@ public class CamPaintActivity extends ActionBarActivity {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(60);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        // Hide action bar
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setTitle("Please choose the title region");
+        // Set Menu actions
+        idStrHashMap = new HashMap<String, String>();
+        strStack = new Stack<String>();
+        strStack.push("Content");
+        strStack.push("Title");
+        setActionBarTitle(strStack.peek());
+        //setMenuActions(strList, actionBar);
+        // actionBar.hide();
         // load img
         Bundle extras = getIntent().getExtras();
         if (extras == null) return;
@@ -389,6 +365,26 @@ public class CamPaintActivity extends ActionBarActivity {
         // Resize img
         if (backgroundImg != null) {
             dv.setBackgroundDrawable(backgroundImg, true);
+        }
+    }
+
+    private void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle("Pick " + title);
+    }
+
+    private void testIfRecogFinished() {
+        // Test if all elements finished
+        if (strStack.empty()) {
+            // Finish recognizing all texts.
+            // Open next activity
+            Toast.makeText(this, "JUMP TO NEXT ACT", Toast.LENGTH_LONG).show();
+            Iterator it = idStrHashMap.entrySet().iterator();
+            while (it.hasNext()) {
+                HashMap.Entry pair = (HashMap.Entry) it.next();
+                Log.i("HASHMAP", "Key:" + pair.getKey().toString()
+                        + ", value: " + pair.getValue().toString());
+                it.remove();
+            }
         }
     }
 
@@ -457,6 +453,7 @@ public class CamPaintActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_cam_paint, menu);
+
         return true;
     }
 
@@ -468,8 +465,29 @@ public class CamPaintActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_skip) {
+            String idstr = strStack.pop();
+            idStrHashMap.put(idstr, "");
+            // Decide if finished
+            testIfRecogFinished();
+            // if not, set next title
+            setActionBarTitle(strStack.peek());
+        } else if (id == R.id.action_done) {
+            // User finished pick
+            if (dv.isRecogDone()) {
+                dv.resetRecogDone();
+                String recogText = dv.getRecognizedText();
+                String idstr = strStack.pop();
+                idStrHashMap.put(idstr, recogText);
+            } else {
+                // User has not picked
+                Toast.makeText(this, "Please Pick " + strStack.peek() + " Region!",
+                        Toast.LENGTH_LONG).show();
+            }
+            // Decide if finished
+            testIfRecogFinished();
+            // if not, set next title
+            setActionBarTitle(strStack.peek());
         }
 
         return super.onOptionsItemSelected(item);
