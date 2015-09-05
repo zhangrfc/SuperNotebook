@@ -3,7 +3,9 @@ package com.pennapps.camnote;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.util.Log;
@@ -20,7 +22,11 @@ import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by QingxiaoDong on 9/4/15.
@@ -29,6 +35,8 @@ import java.util.ArrayList;
 
 public class EventListFragment extends Fragment{
     public static int CurrentID;
+    private String photoPath;
+    private static final int REQUEST_TAKE_PHOTO_PAINT = 1;
 
     InstaNotebookDBHelper inDB;
 
@@ -99,10 +107,17 @@ public class EventListFragment extends Fragment{
                 Bundle dataBundle = new Bundle();
                 dataBundle.putInt("id", 0);
 
-                Intent intent = new Intent(getActivity(), DisplayNote.class);
-                intent.putExtras(dataBundle);
-
-                startActivity(intent);
+                // Integrating Camera Paint
+                File image = null;
+                try {
+                    image = createImageFile();
+                } catch (IOException ex) {
+                    Log.e("exception", ex.toString());
+                }
+                photoPath = image.getAbsolutePath();
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO_PAINT);
             }
         });
 
@@ -127,6 +142,18 @@ public class EventListFragment extends Fragment{
         //inDB.clearAll();
     }
 
+    // Captures when Camera activity returns.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Old request
+        if (requestCode == REQUEST_TAKE_PHOTO_PAINT && resultCode == getActivity().RESULT_OK) {
+            super.onActivityResult(requestCode, resultCode, data);
+            // Check if image really exist
+            if (checkIfImgExists(photoPath))
+                openCamPaintActivity(photoPath);
+        }
+    }
+
     private void getEventList() {
         mEventListArrayAdapter.clear();
 
@@ -142,4 +169,32 @@ public class EventListFragment extends Fragment{
 
 
     }
+
+    public void openCamPaintActivity(String imgPath) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), CamPaintActivity.class);
+        intent.putExtra("IMAGE", imgPath);
+        startActivity(intent);
+    }
+
+    private boolean checkIfImgExists(String path) {
+        // Check if image really exist
+        File image = new File(path);
+        if (image.exists()) {
+            Log.i("image", "file exist.");
+            Log.i("image", path);
+            return true;
+        } else Log.i("image", "file does not exist. ");
+        return false;
+        // Pass the path of photo to next activity.
+    }
+
+    // Create an empty image file, for future storage purpose
+    private File createImageFile() throws IOException {
+        // Create a file name to avoid collision
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "/JPEG_" + timeStamp + ".jpg";
+        File storageDir = getActivity().getExternalFilesDir(null);
+        return new File(storageDir.getAbsolutePath() + imageFileName);
+    }
+
 }
