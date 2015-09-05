@@ -6,9 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.hudomju.swipe.*;
 
 import java.util.ArrayList;
 
@@ -32,6 +37,34 @@ public class EventListFragment extends Fragment {
                 R.id.event_item, new ArrayList<EventItem>());
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_events);
         listView.setAdapter(mEventListArrayAdapter);
+
+        final SwipeToDismissTouchListener<ListViewAdapter> touchListener =
+                new SwipeToDismissTouchListener<>(
+                        new ListViewAdapter(listView),
+                        new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListViewAdapter view, int position) {
+                                mEventListArrayAdapter.remove(mEventListArrayAdapter.getItem(position));
+                                mEventListArrayAdapter.notifyDataSetChanged();
+                            }
+                        });
+        listView.setOnTouchListener(touchListener);
+        listView.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (touchListener.existPendingDismisses()) {
+                    touchListener.undoPendingDismiss();
+                } else {
+                    // Toast.makeText(getActivity().getApplication(), "Position " + position, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return rootView;
     }

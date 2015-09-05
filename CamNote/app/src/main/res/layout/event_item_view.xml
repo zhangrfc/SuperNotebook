@@ -1,28 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="50dp"
     android:id="@+id/event_item"
-    android:background="@drawable/item_color">
+    android:background="@android:color/darker_gray">
 
-    <TextView
-        android:id="@+id/event_name"
-        android:paddingTop="2dp"
-        android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:textSize="@dimen/abc_text_size_body_1_material"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_color">
 
-    <TextView
-        android:id="@+id/event_date"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingTop="2dp"
-        android:paddingRight="@dimen/abc_dropdownitem_text_padding_left"
-        android:layout_toRightOf="@+id/event_name"
-        android:textSize="@dimen/abc_text_size_small_material"
-        android:textStyle="italic"
-        android:gravity="right|center_vertical" />
+        <TextView
+            android:id="@+id/event_name"
+            android:paddingTop="2dp"
+            android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/abc_text_size_body_1_material"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/event_date"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="2dp"
+            android:paddingRight="@dimen/abc_dropdownitem_text_padding_left"
+            android:layout_toRightOf="@+id/event_name"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:textStyle="italic"
+            android:gravity="right|center_vertical" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="3"
+        android:height="50dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txt_delete"
+            android:gravity="center_vertical"
+            android:text="@string/deleted"
+            android:paddingLeft="20dp"
+            android:clickable="false"
+            android:layout_weight="2"
+            android:hapticFeedbackEnabled="true"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_text_size_body_1_material"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/txt_undo"
+            android:text="@string/undo"
+            android:clickable="false"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_light"
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_text_size_body_1_material"/>
+
+    </LinearLayout>
+
+</FrameLayout>

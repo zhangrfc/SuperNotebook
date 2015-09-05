@@ -10,8 +10,6 @@
         android:id="@+id/list_view_events"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="2dp"
         android:paddingLeft="0dp"
         android:paddingRight="0dp" />
 

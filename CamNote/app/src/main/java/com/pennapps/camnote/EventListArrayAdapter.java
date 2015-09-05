@@ -50,6 +50,8 @@ public class EventListArrayAdapter extends ArrayAdapter<EventItem> {
         return convertView;
     }
 
+
+
     public List<EventItem> getItems() {
         ArrayList<EventItem> games = new ArrayList<EventItem>();
         for (int i = 0; i < this.getCount(); i++) {
