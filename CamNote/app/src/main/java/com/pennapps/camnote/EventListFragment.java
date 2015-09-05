@@ -85,8 +85,11 @@ public class EventListFragment extends Fragment{
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 EventItem eventItem = mEventListArrayAdapter.getItem(position);
-
+                Bundle dataBundle = new Bundle();
+                dataBundle.putInt("id", eventItem.id);
                 Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+                intent.putExtras(dataBundle);
+
                 startActivity(intent);
             }
         });
