@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.pennapps.camnote"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -24,4 +24,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.melnykov:floatingactionbutton:1.3.0'
+    compile project(':libraries:Android-ImageMagick')
+    compile project(':libraries:tess-two')
 }
