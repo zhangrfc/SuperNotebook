@@ -39,6 +39,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import magick.ExceptionType;
+import magick.ImageInfo;
+import magick.Magick;
+import magick.MagickImage;
+import magick.util.MagickBitmap;
 import pennapps.campicdemo.R;
 
 public class CamPaintActivity extends AppCompatActivity{
@@ -400,6 +405,53 @@ public class CamPaintActivity extends AppCompatActivity{
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Bitmap resizedBitmap = resizeBitmap(bitmap, newSize);
         return new BitmapDrawable(resizedBitmap);
+    }
+
+    private String saveMagickImageToFile(MagickImage magickImage, String str) {
+        String DATA_PATH = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath())
+                .getAbsolutePath();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ").format(new Date());
+        String imageFileName = "/PNG_" + timeStamp + str + ".png";
+        File file = new File(DATA_PATH + imageFileName);
+        // output image
+        try {
+            Bitmap bitmap = MagickBitmap.ToBitmap(magickImage);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Bitmap textcleaner(Bitmap bitmap) {
+        try {
+            MagickImage magickImage = MagickBitmap.fromBitmap(bitmap);
+            // convert to grayscale
+            magickImage.setGrayscale();
+            saveMagickImageToFile(magickImage, "gray scale");
+            // enhance stretch, constrast sharpen
+            magickImage.contrastImage(true);
+            saveMagickImageToFile(magickImage, "contrast image");
+            // filter size, clean background
+            magickImage.medianFilterImage(15);
+            saveMagickImageToFile(magickImage, "median filter");
+            // or
+            magickImage.reduceNoiseImage(15);
+            saveMagickImageToFile(magickImage, "reduce noise");
+            // cant find offset
+            // sharpen
+            magickImage.sharpenImage(1, 1);
+            saveMagickImageToFile(magickImage, "sharpen image");
+            // trim
+            magickImage.trimImage();
+            saveMagickImageToFile(magickImage, "trim image");
+
+            return MagickBitmap.ToBitmap(magickImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
