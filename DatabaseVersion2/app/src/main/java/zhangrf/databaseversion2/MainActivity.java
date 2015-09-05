@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch(item.getItemId())
         {
-            case R.id.item1:Bundle dataBundle = new Bundle();
+            case R.id.item1:
+                Bundle dataBundle = new Bundle();
                 dataBundle.putInt("id", 0);
 
                 Intent intent = new Intent(getApplicationContext(),DisplayNote.class);

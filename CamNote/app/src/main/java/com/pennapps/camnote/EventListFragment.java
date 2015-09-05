@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.hudomju.swipe.*;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -78,6 +80,21 @@ public class EventListFragment extends Fragment{
                 EventItem eventItem = mEventListArrayAdapter.getItem(position);
 
                 Intent intent = new Intent(getActivity(),EventDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.camera_fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Log.d("Tag", "Clicked");
+
+                Bundle dataBundle = new Bundle();
+                dataBundle.putInt("id", 0);
+
+                Intent intent = new Intent(getActivity(),DisplayNote.class);
+                intent.putExtras(dataBundle);
+
                 startActivity(intent);
             }
         });
