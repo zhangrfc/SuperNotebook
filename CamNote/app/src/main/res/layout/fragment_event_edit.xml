@@ -12,6 +12,49 @@
         android:layout_height="wrap_content"
         android:hint="Title"
         android:textColor="@color/blue"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textColorHint="@color/blue"
+        android:background="@android:color/transparent"
+        android:textSize="20sp"
+        android:paddingBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Date \u0026 Time"
+        android:textColor="@android:color/darker_gray"
+        android:textColorHint="@android:color/darker_gray"
+        android:background="@android:color/transparent"
+        android:layout_below="@id/item_title"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="15sp"/>
+
+    <EditText
+        android:id="@+id/item_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Location"
+        android:textColor="@android:color/darker_gray"
+        android:textColorHint="@android:color/darker_gray"
+        android:background="@android:color/transparent"
+        android:layout_below="@id/item_date"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="15sp"/>
+
+    <EditText
+        android:id="@+id/item_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="(Blank)"
+        android:textColorHint="@android:color/darker_gray"
+        android:background="@android:color/transparent"
+        android:layout_below="@id/item_location"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="18sp"/>
+
 
 </RelativeLayout>
