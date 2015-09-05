@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EventListActivity"
+            android:name=".EventDetailActivity"
             android:label="Cam Note">
             <intent-filter>
                 <action android:name="android.intent.action.Main" />

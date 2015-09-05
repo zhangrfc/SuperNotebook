@@ -1,8 +1,11 @@
 package com.pennapps.camnote;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by QingxiaoDong on 9/4/15.
  */
-public class EventListFragment extends Fragment {
+public class EventListFragment extends Fragment{
 
     EventListArrayAdapter mEventListArrayAdapter;
 
@@ -63,6 +66,19 @@ public class EventListFragment extends Fragment {
                 } else {
                     // Toast.makeText(getActivity().getApplication(), "Position " + position, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                EventItem eventItem = mEventListArrayAdapter.getItem(position);
+
+                Intent intent = new Intent(getActivity(),EventDetailActivity.class);
+                startActivity(intent);
             }
         });
 

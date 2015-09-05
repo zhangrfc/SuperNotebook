@@ -99,7 +99,7 @@ public class DisplayContact extends Activity {
             }
 
             else{
-                getMenuInflater().inflate(R.menu.main, menu);
+                getMenuInflater().inflate(R.menu.main_menu, menu);
             }
         }
         return true;

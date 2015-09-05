@@ -8,11 +8,11 @@ import android.view.MenuItem;
 /**
  * Created by QingxiaoDong on 9/4/15.
  */
-public class EventListActivity extends ActionBarActivity {
+public class EventDetailActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list);
+        setContentView(R.layout.activity_event_detail);
 
     }
 
@@ -20,7 +20,7 @@ public class EventListActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
 
