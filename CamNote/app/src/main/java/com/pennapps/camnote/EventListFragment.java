@@ -25,7 +25,12 @@ import java.util.ArrayList;
 /**
  * Created by QingxiaoDong on 9/4/15.
  */
+
+
 public class EventListFragment extends Fragment{
+    public static int CurrentID;
+
+    InstaNotebookDBHelper inDB;
 
     EventListArrayAdapter mEventListArrayAdapter;
 
@@ -36,6 +41,7 @@ public class EventListFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         final View rootView =  inflater.inflate(R.layout.fragment_event_list, container, false);
 
         mEventListArrayAdapter = new EventListArrayAdapter(getActivity(), R.layout.event_item_view,
@@ -54,6 +60,7 @@ public class EventListFragment extends Fragment{
 
                             @Override
                             public void onDismiss(ListViewAdapter view, int position) {
+                                inDB.deleteNote(mEventListArrayAdapter.getItem(position).id);
                                 mEventListArrayAdapter.remove(mEventListArrayAdapter.getItem(position));
                                 mEventListArrayAdapter.notifyDataSetChanged();
                             }
@@ -79,41 +86,60 @@ public class EventListFragment extends Fragment{
                 // if it cannot seek to that position.
                 EventItem eventItem = mEventListArrayAdapter.getItem(position);
 
-                Intent intent = new Intent(getActivity(),EventDetailActivity.class);
+                Intent intent = new Intent(getActivity(), EventDetailActivity.class);
                 startActivity(intent);
             }
         });
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.camera_fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener(){
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d("Tag", "Clicked");
 
                 Bundle dataBundle = new Bundle();
                 dataBundle.putInt("id", 0);
 
-                Intent intent = new Intent(getActivity(),DisplayNote.class);
+                Intent intent = new Intent(getActivity(), DisplayNote.class);
                 intent.putExtras(dataBundle);
 
                 startActivity(intent);
             }
         });
 
+
+
         return rootView;
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
+        inDB = new InstaNotebookDBHelper(getActivity().getApplicationContext());
         getEventList();
+        CurrentID = inDB.numberOfRows();
+        Log.d(Integer.toString(CurrentID), "currentID");
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        //inDB.clearAll();
     }
 
     private void getEventList() {
-        EventItem item1 =  new EventItem("Penn Apps XII", "Sep. 4");
-        EventItem item2 = new EventItem("Microsoft Azure", "Sep. 9");
-        EventItem item3 = new EventItem("Google Resume Review", "Sep. 9");
-        mEventListArrayAdapter.add(item1);
-        mEventListArrayAdapter.add(item2);
-        mEventListArrayAdapter.add(item3);
+        mEventListArrayAdapter.clear();
+
+        ArrayList array_list = inDB.getAllNotes();
+        for(int i = 0; i < array_list.size(); i++){
+            Note note = (Note)array_list.get(i);
+            EventItem item = new EventItem(Integer.parseInt(note.NOTE_COLUMN_ID), note.NOTE_COLUMN_TITLE,
+                    note.NOTE_COLUMN_DATE);
+            mEventListArrayAdapter.add(item);
+            CurrentID = inDB.numberOfRows();
+            Log.d(Integer.toString(CurrentID), "currentID");
+        }
+
+
     }
 }
