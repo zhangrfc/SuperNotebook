@@ -24,6 +24,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.textservice.SentenceSuggestionsInfo;
+import android.view.textservice.SpellCheckerSession;
+import android.view.textservice.SuggestionsInfo;
+import android.view.textservice.TextInfo;
+import android.view.textservice.TextServicesManager;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -32,15 +37,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import pennapps.campicdemo.R;
 
-public class CamPaintActivity extends AppCompatActivity {
+public class CamPaintActivity extends AppCompatActivity{
 
     DrawingView dv;
     private Paint mPaint;
 
-    public class DrawingView extends View {
+    public class DrawingView extends View implements SpellCheckerSession.SpellCheckerSessionListener{
         private Bitmap mBitmap;
         private Canvas mCanvas;
         private Path mPath;
@@ -270,7 +276,18 @@ public class CamPaintActivity extends AppCompatActivity {
             Log.i("RECOG_TEXT", recognizedText);
             Toast.makeText(this.context, recognizedText, Toast.LENGTH_LONG).show();
             baseAPI.end();
+            check_spelling(recognizedText);
             return recognizedText;
+        }
+
+        private void check_spelling(String string) {
+            fetchSuggestionsFor(string);
+        }
+
+        private String onGetSpellingCheck(String resultString) {
+            Log.i("SPELL CHECK", resultString);
+            Toast.makeText(this.context, resultString, Toast.LENGTH_LONG).show();
+            return resultString;
         }
 
         private RectF getRectWithOffset(RectF rectF, float offset) {
@@ -288,6 +305,48 @@ public class CamPaintActivity extends AppCompatActivity {
             RectF result = rectF;
             result.set(left, top, right, bottom);
             return result;
+        }
+
+        // SpellCheckerClient
+        @Override
+        public void onGetSuggestions(SuggestionsInfo[] results) {
+
+        }
+
+        @Override
+        public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
+            final StringBuffer sb = new StringBuffer("");
+            for(SentenceSuggestionsInfo result:results){
+                int n = result.getSuggestionsCount();
+                for(int i=0; i < n; i++){
+                    int m = result.getSuggestionsInfoAt(i).getSuggestionsCount();
+
+                    if((result.getSuggestionsInfoAt(i).getSuggestionsAttributes() &
+                            SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO) != SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO )
+                        continue;
+
+                    for(int k=0; k < m; k++) {
+                        sb.append(result.getSuggestionsInfoAt(i).getSuggestionAt(k))
+                                .append("\n");
+                    }
+                    sb.append("\n");
+                }
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onGetSpellingCheck(sb.toString());
+                }
+            });
+        }
+
+        public void fetchSuggestionsFor(String input) {
+            TextServicesManager tsm =
+                    (TextServicesManager) getSystemService(TEXT_SERVICES_MANAGER_SERVICE);
+            SpellCheckerSession session =
+                    tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, true);
+            session.getSentenceSuggestions(new TextInfo[] {new TextInfo(input)}, 5);
         }
     }
 
@@ -364,4 +423,5 @@ public class CamPaintActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
