@@ -89,7 +89,6 @@ public class EventListFragment extends Fragment{
                 dataBundle.putInt("id", eventItem.id);
                 Intent intent = new Intent(getActivity(), EventDetailActivity.class);
                 intent.putExtras(dataBundle);
-
                 startActivity(intent);
             }
         });
@@ -128,10 +127,7 @@ public class EventListFragment extends Fragment{
         super.onStart();
         inDB = new InstaNotebookDBHelper(getActivity().getApplicationContext());
         getEventList();
-        CurrentID = inDB.numberOfRows();
-        //inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
-        //inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
-        Log.d(Integer.toString(CurrentID), "currentID");
+        Log.d(Integer.toString(inDB.numberOfRows()), "numofRows");
     }
 
     @Override
@@ -161,8 +157,6 @@ public class EventListFragment extends Fragment{
             EventItem item = new EventItem(Integer.parseInt(note.NOTE_COLUMN_ID), note.NOTE_COLUMN_TITLE,
                     note.NOTE_COLUMN_DATE);
             mEventListArrayAdapter.add(item);
-            CurrentID = inDB.numberOfRows();
-            Log.d(Integer.toString(CurrentID), "currentID");
         }
 
 

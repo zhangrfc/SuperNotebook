@@ -23,6 +23,8 @@ public class EditFragment extends Fragment {
 
         final View rootView =  inflater.inflate(R.layout.fragment_event_edit, container, false);
 
+
+
         return rootView;
     }
 }

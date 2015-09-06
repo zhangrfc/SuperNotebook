@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class EventDetailFragment extends Fragment {
 
     InstaNotebookDBHelper inDB;
-
+    int noteID;
     ImageView pic;
 
     public EventDetailFragment(){
@@ -37,7 +37,7 @@ public class EventDetailFragment extends Fragment {
         inDB= new InstaNotebookDBHelper(getActivity().getApplicationContext());
 
         Bundle extras = getActivity().getIntent().getExtras();
-        int noteID = extras.getInt("id");
+        noteID = extras.getInt("id");
 
         Cursor rs = inDB.getOneNote(noteID);
         rs.moveToFirst();

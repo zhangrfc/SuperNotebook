@@ -3,6 +3,7 @@ package com.pennapps.camnote;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,8 +35,16 @@ public class EventDetailActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
+
+            Bundle extras = getIntent().getExtras();
+            int noteID = extras.getInt("id");
+            Bundle dataBundle = new Bundle();
+            Log.d(Integer.toString(noteID),"IDrow");
+            dataBundle.putInt("id", noteID);
             Intent editIntent = new Intent(EventDetailActivity.this, EditActivity.class);
+            editIntent.putExtras(dataBundle);
             startActivity(editIntent);
+
         }
 
 
