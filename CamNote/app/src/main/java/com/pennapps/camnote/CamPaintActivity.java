@@ -292,7 +292,7 @@ public class CamPaintActivity extends ActionBarActivity {
 
             // get clearer bitmap
             bitmap = textcleaner(bitmap);
-            print_png(bitmap);
+            // print_png(bitmap);
 
             baseAPI.setImage(bitmap);
             String recognizedText = baseAPI.getUTF8Text();
@@ -365,6 +365,7 @@ public class CamPaintActivity extends ActionBarActivity {
         strList = new ArrayList<String>();
         strList.add("Title");
         strList.add("Content");
+        strList.add("Location");
         strStack = createStackByList(strList);
         setActionBarTitle(strStack.peek());
         //setMenuActions(strList, actionBar);
@@ -397,17 +398,6 @@ public class CamPaintActivity extends ActionBarActivity {
         if (strStack.empty()) {
             // Finish recognizing all texts.
             // Open next activity
-            Toast.makeText(this, "JUMP TO NEXT ACT", Toast.LENGTH_LONG).show();
-            // For DEBUGGING
-            /*
-            Iterator it = idStrHashMap.entrySet().iterator();
-            while (it.hasNext()) {
-                HashMap.Entry pair = (HashMap.Entry) it.next();
-                Log.i("HASHMAP", "Key:" + pair.getKey().toString()
-                        + ", value: " + pair.getValue().toString());
-                it.remove();
-            }
-            */
             // Insert into DB
             InstaNotebookDBHelper inDB = new InstaNotebookDBHelper(getApplicationContext());
             long id = inDB.insertNote(idStrHashMap.get(strList.get(0)), // title
@@ -415,7 +405,7 @@ public class CamPaintActivity extends ActionBarActivity {
                     "", // time
                     "", // date
                     "", // host
-                    "", // address
+                    idStrHashMap.get(strList.get(2)), // address
                     dv.getPhotoPath(), // picture
                     "0"); // category
             // open intent

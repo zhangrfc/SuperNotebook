@@ -24,7 +24,6 @@
         android:button="@drawable/star"
         android:background="@android:color/transparent"
         android:gravity="right|center_vertical"
-        android:onClick="checkboxClicked"
         android:focusable="false"/>
 
 </RelativeLayout>
