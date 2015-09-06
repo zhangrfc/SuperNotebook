@@ -3,11 +3,11 @@ package com.pennapps.camnote;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 /**
@@ -33,6 +33,8 @@ public class EditActivity extends ActionBarActivity{
     String picture_str;
     String category_str;
 
+    private static final int REQUEST_DATE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,13 @@ public class EditActivity extends ActionBarActivity{
         location = (EditText)findViewById(R.id.item_location);
         detail = (EditText)findViewById(R.id.item_detail);
 
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), EditDateFragmentActivity.class);
+                startActivityForResult(intent, REQUEST_DATE);
+            }
+        });
 
         inDB= new InstaNotebookDBHelper(getApplicationContext());
         Bundle extras = getIntent().getExtras();
@@ -67,7 +76,21 @@ public class EditActivity extends ActionBarActivity{
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == REQUEST_DATE && resultCode == RESULT_OK) {
+            int year = (int) data.getExtras().get("year");
+            int month = (int) data.getExtras().get("month");
+            int day = (int) data.getExtras().get("day");
+            int hour = (int) data.getExtras().get("hour");
+            int minute = (int) data.getExtras().get("minute");
+            date.setText(Integer.toString(year) + "/" +
+                    Integer.toString(month) + "/" +
+                    Integer.toString(day) + " " +
+                    Integer.toString(hour) + ":" +
+                    Integer.toString(minute));
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
