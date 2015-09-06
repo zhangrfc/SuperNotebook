@@ -16,6 +16,7 @@
        android:textColor="@android:color/holo_blue_dark"/>
 
     <CheckBox
+        android:id="@+id/event_fav"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:paddingRight="2dp"
@@ -23,6 +24,7 @@
         android:button="@drawable/star"
         android:background="@android:color/transparent"
         android:gravity="right|center_vertical"
+        android:onClick="checkboxClicked"
         android:focusable="false"/>
 
 </RelativeLayout>

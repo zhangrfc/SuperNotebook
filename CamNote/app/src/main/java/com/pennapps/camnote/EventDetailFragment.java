@@ -32,6 +32,7 @@ public class EventDetailFragment extends Fragment {
     InstaNotebookDBHelper inDB;
     int noteID;
     ImageView pic;
+    String favorite_str;
 
     public EventDetailFragment(){
 
@@ -58,7 +59,7 @@ public class EventDetailFragment extends Fragment {
         String address_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_ADDRESS));
         String picture_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_PICTURE));
         String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
-        String favorite_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
+        favorite_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
 
 
         TextView name = (TextView) rootView.findViewById(R.id.item_name);
@@ -93,19 +94,27 @@ public class EventDetailFragment extends Fragment {
 
         final FloatingActionButton floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.star_fab);
 
-        if (favorite_str == "1") {
+        if (favorite_str.equals("1")) {
+
             floatingActionButton.setImageResource(R.drawable.ic_action_yellowstar);
         } else {
+
             floatingActionButton.setImageResource(R.drawable.ic_star);
         }
         final String fs = favorite_str;
+        final int fnoteid = noteID;
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-                if(fs == "1") {
+            public void onClick(View v) {
+                //Log.d("fs",fs);
+                if(favorite_str.equals("1")) {
+                    inDB.updatefav(fnoteid, "0");
+                    favorite_str = "0";
                     floatingActionButton.setImageResource(R.drawable.ic_star);
 
                 } else {
+                    inDB.updatefav(fnoteid, "1");
+                    favorite_str = "1";
                     floatingActionButton.setImageResource(R.drawable.ic_action_yellowstar);
                 }
             }

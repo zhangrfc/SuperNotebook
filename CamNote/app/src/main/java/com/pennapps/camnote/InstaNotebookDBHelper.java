@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -76,6 +77,7 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
     }
 
 
+
     public Cursor getOneNote(int id){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from " + NOTE_TABLE_NAME + " where " + NOTE_COLUMN_ID+ "="+ id +"", null );
@@ -86,6 +88,31 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, NOTE_TABLE_NAME);
         return numRows;
+    }
+
+    public boolean updatefav (Integer id, String fav) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NOTE_COLUMN_FAVOURITE, fav);
+        Log.d("input", fav);
+        db.update(NOTE_TABLE_NAME, contentValues, NOTE_COLUMN_ID + "= ?", new String[]{Integer.toString(id)});
+        Cursor rs = getOneNote(id);
+
+        rs.moveToFirst();
+
+        String title_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_TITLE));
+        String context_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_CONTEXT));
+        String time_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_TIME));
+        String date_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_DATE));
+        String host_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_HOST));
+        String address_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_ADDRESS));
+        String picture_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_PICTURE));
+        String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
+        String favorite_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
+        Log.d("result", favorite_str);
+
+
+        return true;
     }
 
     public boolean updateNote (Integer id, String title, String context, String time, String date,

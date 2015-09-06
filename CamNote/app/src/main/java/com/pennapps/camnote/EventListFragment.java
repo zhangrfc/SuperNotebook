@@ -20,6 +20,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -48,6 +50,8 @@ public class EventListFragment extends Fragment{
     public static int CurrentID;
     private String photoPath;
     private static final int REQUEST_TAKE_PHOTO_PAINT = 1;
+    private DynamicListView listView;
+    private int size;
 
     InstaNotebookDBHelper inDB;
 
@@ -124,7 +128,7 @@ public class EventListFragment extends Fragment{
             }
         });
 
-
+        this.listView = listView;
 
         return rootView;
     }
@@ -135,12 +139,12 @@ public class EventListFragment extends Fragment{
         super.onStart();
         currentSortCode = CustomEventComparator.ST_ORDER;
         inDB = new InstaNotebookDBHelper(getActivity().getApplicationContext());
-        getEventList();
+        size = getEventList();
         Log.d(Integer.toString(inDB.numberOfRows()), "numofRows");
-        CurrentID = inDB.numberOfRows();
-        inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
-        inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
+        //inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
+        //inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
         Log.d(Integer.toString(CurrentID), "currentID");
+
     }
 
     @Override
@@ -161,7 +165,8 @@ public class EventListFragment extends Fragment{
         }
     }
 
-    private void getEventList() {
+
+    private int getEventList() {
         mEventListArrayAdapter.clear();
 
         ArrayList array_list = inDB.getAllNotes();
@@ -171,8 +176,7 @@ public class EventListFragment extends Fragment{
                     note.NOTE_COLUMN_DATE, note.NOTE_COLUMN_FAVOURITE);
             mEventListArrayAdapter.add(item);
         }
-
-
+        return array_list.size();
     }
 
     public void openCamPaintActivity(String imgPath) {
@@ -206,6 +210,8 @@ public class EventListFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+
     }
 
     @Override

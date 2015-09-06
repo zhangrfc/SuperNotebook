@@ -10,10 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,11 +28,14 @@ import java.io.OutputStream;
 
 public class MainActivity extends ActionBarActivity {
 
+    InstaNotebookDBHelper inDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        inDB= new InstaNotebookDBHelper(getApplicationContext());
+
     }
 
 
@@ -58,5 +65,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
