@@ -417,7 +417,7 @@ public class CamPaintActivity extends ActionBarActivity {
                     "", // host
                     "", // address
                     dv.getPhotoPath(), // picture
-                    ""); // category
+                    "0"); // category
             // open intent
             Bundle bundle = new Bundle();
             bundle.putInt("id", (int)id);
