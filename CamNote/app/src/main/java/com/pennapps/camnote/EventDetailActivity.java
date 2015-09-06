@@ -17,7 +17,7 @@ import android.view.MenuItem;
  * Created by QingxiaoDong on 9/4/15.
  */
 public class EventDetailActivity extends ActionBarActivity {
-    private ShareActionProvider mShareActionProvider;
+    //private ShareActionProvider mShareActionProvider;
 
     InstaNotebookDBHelper inDB;
     @Override
@@ -32,8 +32,8 @@ public class EventDetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
-        MenuItem item = menu.findItem(R.id.action_share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+       // MenuItem item = menu.findItem(R.id.action_share);
+       // mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         return true;
     }
 
@@ -64,8 +64,13 @@ public class EventDetailActivity extends ActionBarActivity {
             String address_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_ADDRESS));
             String shareText = "Date " + date_str + "\nTitle " + title_str +
                     "\nLocation " + address_str + "\nDetail " + context_str;
-            Intent shareIntent = ShareCompat.IntentBuilder.from(this).setText("text/plain").setText(shareText).getIntent();
-            mShareActionProvider.setShareIntent(shareIntent);
+            Log.d("String", shareText);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+            sendIntent.setType("text/plain");
+           // mShareActionProvider.setShareIntent(sendIntent);
+            startActivity(sendIntent);
         }
 
 
