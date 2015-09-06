@@ -58,6 +58,7 @@ public class EventDetailFragment extends Fragment {
         String address_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_ADDRESS));
         String picture_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_PICTURE));
         String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
+        String favorite_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
 
 
         TextView name = (TextView) rootView.findViewById(R.id.item_name);
@@ -91,9 +92,22 @@ public class EventDetailFragment extends Fragment {
         });
 
         final FloatingActionButton floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.star_fab);
+
+        if (favorite_str == "1") {
+            floatingActionButton.setImageResource(R.drawable.ic_action_yellowstar);
+        } else {
+            floatingActionButton.setImageResource(R.drawable.ic_star);
+        }
+        final String fs = favorite_str;
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                floatingActionButton.setImageResource(R.drawable.ic_action_yellowstar);
+
+                if(fs == "1") {
+                    floatingActionButton.setImageResource(R.drawable.ic_star);
+
+                } else {
+                    floatingActionButton.setImageResource(R.drawable.ic_action_yellowstar);
+                }
             }
         });
 

@@ -21,4 +21,4 @@ android:layout_gravity="center_horizontal"
 android:id="@+id/imageView" android:src="@drawable/images">
 </ImageView>
 </LinearLayout>
-<!-- From: file:/D:/SuperNotebook/CamNote/libraries/Android-ImageMagick/res/layout/main2.xml -->
+<!-- From: file:/Users/QingxiaoDong/GitHub/SuperNotebook/CamNote/libraries/Android-ImageMagick/res/layout/main2.xml -->
