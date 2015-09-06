@@ -3,6 +3,7 @@ package com.pennapps.camnote;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,7 +56,7 @@ public class EventDetailFragment extends Fragment {
 
         TextView name = (TextView) rootView.findViewById(R.id.item_name);
         TextView date = (TextView) rootView.findViewById(R.id.item_date);
-        TextView location = (TextView) rootView.findViewById(R.id.item_location);
+        final TextView location = (TextView) rootView.findViewById(R.id.item_location);
         TextView description = (TextView) rootView.findViewById(R.id.item_description);
 
         name.setText((CharSequence) title_str);
@@ -67,6 +69,20 @@ public class EventDetailFragment extends Fragment {
             ImageView imageView = (ImageView) rootView.findViewById(R.id.item_pic);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picture_str));
         }
+        ImageButton mapImg = (ImageButton) rootView.findViewById(R.id.map_button);
+        if(location.getText().toString().equals("")){
+            mapImg.setVisibility(View.INVISIBLE);
+        }
+        mapImg.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Uri gmmIntetnUri = Uri.parse("geo:0,0?q=" + location.getText().toString());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntetnUri);
+                mapIntent.setPackage("com.goolge.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
         return rootView;
     }
 

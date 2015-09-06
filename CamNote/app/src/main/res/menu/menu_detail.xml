@@ -14,10 +14,4 @@
         android:orderInCategory="1"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/action_about"
-        android:title="About"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-
 </menu>
