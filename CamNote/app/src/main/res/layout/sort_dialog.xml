@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/blue">
+
+    <TextView
+        android:id="@+id/sort_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Sort by ..."
+        android:gravity="center_vertical"
+        android:textSize="@dimen/abc_text_size_title_material"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"/>
+
+    <RadioGroup
+        android:id="@+id/sort_dialog_choices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sort_dialog_title"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/sort_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="@android:color/white"
+            android:buttonTint="@color/watermelon"
+            android:textSize="@dimen/abc_text_size_body_1_material"/>
+
+        <RadioButton
+            android:id="@+id/sort_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Favorite (default)"
+            android:textColor="@android:color/white"
+            android:buttonTint="@color/watermelon"
+            android:textSize="@dimen/abc_text_size_body_1_material"/>
+
+
+    </RadioGroup>
+
+
+
+</RelativeLayout>

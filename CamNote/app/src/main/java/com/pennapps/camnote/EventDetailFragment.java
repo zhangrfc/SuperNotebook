@@ -40,7 +40,6 @@ public class EventDetailFragment extends Fragment {
 
         Bundle extras = getActivity().getIntent().getExtras();
         noteID = extras.getInt("id");
-
         int noteID = extras.getInt("id");
         Log.i("GETIDFROM", Integer.toString(noteID));
         Cursor rs = inDB.getOneNote(noteID);

@@ -7,9 +7,11 @@ public class EventItem {
     int id;
     String name;
     String date;
-    public EventItem(int eventid, String eventName, String eventDate) {
+    String favorite;
+    public EventItem(int eventid, String eventName, String eventDate, String eventFavorite) {
         id = eventid;
         name = eventName;
         date = eventDate;
+        favorite = eventFavorite;
     }
 }
