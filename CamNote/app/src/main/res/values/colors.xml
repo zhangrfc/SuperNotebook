@@ -4,5 +4,5 @@
     <item name="pressed" type="color">#81D4FA</item>
     <item name="ripple" type="color">#B3E5FC</item>
     <item name="gray" type="color">#616161</item>
-    <item name="watermelon" type="color">#FFECB3</item>
+    <item name="watermelon" type="color">#FFC107</item>
 </resources>

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.melnykov.fab.FloatingActionButton;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -82,6 +87,13 @@ public class EventDetailFragment extends Fragment {
                 intent.setData(Uri.parse("geo:0,0?q=" + location.getText().toString()));
                 chooser = Intent.createChooser(intent, "Launch Maps");
                 startActivity(chooser);
+            }
+        });
+
+        final FloatingActionButton floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.star_fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                floatingActionButton.setImageResource(R.drawable.ic_action_yellowstar);
             }
         });
 
