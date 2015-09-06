@@ -129,8 +129,8 @@ public class EventListFragment extends Fragment{
         inDB = new InstaNotebookDBHelper(getActivity().getApplicationContext());
         getEventList();
         CurrentID = inDB.numberOfRows();
-        //inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
-        //inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
+        inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
+        inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
         Log.d(Integer.toString(CurrentID), "currentID");
     }
 

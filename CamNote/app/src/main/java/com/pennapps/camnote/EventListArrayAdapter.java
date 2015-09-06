@@ -36,7 +36,7 @@ public class EventListArrayAdapter extends ArrayAdapter<EventItem> implements Un
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.event_item_view, parent, false);
             viewHolder = new ItemViewHolder();
-            viewHolder.eventDateTextView = (TextView) convertView.findViewById(R.id.event_date);
+            //viewHolder.eventDateTextView = (TextView) convertView.findViewById(R.id.event_date);
             viewHolder.eventNameTextView = (TextView) convertView.findViewById(R.id.event_name);
             convertView.setTag(viewHolder);
 
@@ -47,7 +47,7 @@ public class EventListArrayAdapter extends ArrayAdapter<EventItem> implements Un
 
         if (eventItem != null) {
             viewHolder.eventNameTextView.setText(eventItem.name);
-            viewHolder.eventDateTextView.setText(eventItem.date);
+            //viewHolder.eventDateTextView.setText(eventItem.date);
         }
 
         return convertView;
