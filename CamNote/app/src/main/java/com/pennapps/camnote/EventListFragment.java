@@ -1,6 +1,7 @@
 package com.pennapps.camnote;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,13 +12,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +52,9 @@ public class EventListFragment extends Fragment{
     InstaNotebookDBHelper inDB;
 
     EventListArrayAdapter mEventListArrayAdapter;
+    TimedUndoAdapter mTimedUndoAdapter;
+    RadioGroup sortRadioGroup;
+    int currentSortCode;
 
     public EventListFragment() {
 
@@ -62,7 +70,7 @@ public class EventListFragment extends Fragment{
                 R.id.event_item, new ArrayList<EventItem>());
         DynamicListView listView = (DynamicListView) rootView.findViewById(R.id.list_view_events);
 
-        TimedUndoAdapter swipeUndoAdapter = new TimedUndoAdapter(mEventListArrayAdapter, rootView.getContext(),
+        mTimedUndoAdapter = new TimedUndoAdapter(mEventListArrayAdapter, rootView.getContext(),
                 new OnDismissCallback() {
                     @Override
                     public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
@@ -74,8 +82,8 @@ public class EventListFragment extends Fragment{
                     }
                 }
         );
-        swipeUndoAdapter.setAbsListView(listView);
-        listView.setAdapter(swipeUndoAdapter);
+        mTimedUndoAdapter.setAbsListView(listView);
+        listView.setAdapter(mTimedUndoAdapter);
         listView.enableSimpleSwipeUndo();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -125,10 +133,10 @@ public class EventListFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
+        currentSortCode = CustomEventComparator.ST_ORDER;
         inDB = new InstaNotebookDBHelper(getActivity().getApplicationContext());
         getEventList();
         Log.d(Integer.toString(inDB.numberOfRows()), "numofRows");
-
         CurrentID = inDB.numberOfRows();
         inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
         inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
@@ -160,7 +168,7 @@ public class EventListFragment extends Fragment{
         for(int i = 0; i < array_list.size(); i++){
             Note note = (Note)array_list.get(i);
             EventItem item = new EventItem(Integer.parseInt(note.NOTE_COLUMN_ID), note.NOTE_COLUMN_TITLE,
-                    note.NOTE_COLUMN_DATE);
+                    note.NOTE_COLUMN_DATE, note.NOTE_COLUMN_FAVOURITE);
             mEventListArrayAdapter.add(item);
         }
 
@@ -192,6 +200,52 @@ public class EventListFragment extends Fragment{
         String imageFileName = "/JPEG_" + timeStamp + ".jpg";
         File storageDir = getActivity().getExternalFilesDir(null);
         return new File(storageDir.getAbsolutePath() + imageFileName);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_sort) {
+
+            final Dialog sortDialog = new Dialog(getActivity());
+            sortDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            sortDialog.setTitle(R.string.sort_preference_label);
+            sortDialog.setContentView(R.layout.sort_dialog);
+            RadioButton rb = null;
+            sortRadioGroup = (RadioGroup) sortDialog.findViewById(R.id.sort_dialog_choices);
+            rb = (RadioButton) sortRadioGroup.findViewById(currentSortCode);
+            if (rb != null) {
+                rb.setChecked(true);
+            }
+
+            sortDialog.show();
+
+            if (sortRadioGroup != null) {
+                sortRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                        if (i == currentSortCode) {
+                        } else {
+                            mEventListArrayAdapter.sort(new CustomEventComparator(i));
+                            DynamicListView listView = (DynamicListView) getView().findViewById(R.id.list_view_events);
+                            mTimedUndoAdapter.setAbsListView(listView);
+                            listView.setAdapter(mTimedUndoAdapter);
+                            listView.enableSimpleSwipeUndo();
+                            listView.setAdapter(mEventListArrayAdapter);
+                            currentSortCode = i;
+                        }
+                    }
+                });
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -12,5 +12,5 @@ public class Note {
     public String NOTE_COLUMN_HOST = "host";
     public String NOTE_COLUMN_ADDRESS = "address";
     public String NOTE_COLUMN_PICTURE = "picture";
-    public String NOTE_COLUMN_CATEGORY = "category";
+    public String NOTE_COLUMN_FAVOURITE = "category";
 }
