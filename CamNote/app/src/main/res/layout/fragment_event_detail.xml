@@ -14,14 +14,16 @@
     <TextView
         android:id="@+id/item_name"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
         android:textStyle="bold"
         android:textColor="@color/blue"
         android:text="Fake Event Name"
         android:gravity="center_vertical"
         android:textSize="20sp"
         android:layout_below="@+id/item_pic"
-        android:paddingLeft="5dp"/>
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"/>
 
     <TextView
         android:id="@+id/item_date"
@@ -31,7 +33,7 @@
         android:text="September 31, 2015"
         android:layout_below="@id/item_name"
         android:textStyle="italic"
-        android:paddingLeft="5dp"/>
+        android:paddingLeft="20dp"/>
 
     <TextView
         android:id="@+id/item_location"
@@ -40,7 +42,7 @@
         android:gravity="center_vertical"
         android:text="fake event location"
         android:layout_below="@+id/item_date"
-        android:paddingLeft="5dp"
+        android:paddingLeft="20dp"
         android:clickable="true" />
 
     <ImageButton
@@ -57,10 +59,9 @@
         android:id="@+id/item_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
         android:text="(no description)"
         android:layout_below="@+id/map_button"
-        android:paddingLeft="5dp"/>
+        android:paddingLeft="20dp"/>
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/sort_fab"

@@ -131,8 +131,8 @@ public class EventListFragment extends Fragment{
         Log.d(Integer.toString(inDB.numberOfRows()), "numofRows");
 =======
         CurrentID = inDB.numberOfRows();
-        inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
-        inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
+        //inDB.insertNote("Title", "context", "time", "date", "host", "add", "pic", "cat");
+        //inDB.insertNote("Title2", "context", "time", "date", "host", "add", "pic", "cat");
         Log.d(Integer.toString(CurrentID), "currentID");
 >>>>>>> origin/master
     }
