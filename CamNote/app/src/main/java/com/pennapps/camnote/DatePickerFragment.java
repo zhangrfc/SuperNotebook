@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -44,6 +45,12 @@ public class DatePickerFragment extends DialogFragment
     }
 
     @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        mListener.onDateCancel();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -62,6 +69,7 @@ public class DatePickerFragment extends DialogFragment
 
     public interface OnDateSetListener {
         void onDateSet(int year, int month, int day);
+        void onDateCancel();
     }
 
 }

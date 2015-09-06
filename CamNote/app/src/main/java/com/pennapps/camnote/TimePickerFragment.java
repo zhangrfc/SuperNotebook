@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
@@ -32,6 +33,12 @@ public class TimePickerFragment extends DialogFragment
                 DateFormat.is24HourFormat(getActivity()));
     }
 
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        listener.onTimeCancel();
+    }
+
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         if (listener != null){
@@ -58,6 +65,7 @@ public class TimePickerFragment extends DialogFragment
 
     public interface OnTimeSetListener{
         void onTimeSet(int hour, int minute);
+        void onTimeCancel();
     }
 
 }

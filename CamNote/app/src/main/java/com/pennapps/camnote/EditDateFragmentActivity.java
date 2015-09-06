@@ -11,7 +11,7 @@ import android.view.MenuItem;
 public class EditDateFragmentActivity extends FragmentActivity
         implements DatePickerFragment.OnDateSetListener, TimePickerFragment.OnTimeSetListener {
 
-    private int year, month, day, hour, minute;
+    private int year, month, day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,21 @@ public class EditDateFragmentActivity extends FragmentActivity
         resultIntent.putExtra("minute", minute);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
+    }
+
+    public void onCancel() {
+        Intent resultIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, resultIntent);
+        finish();
+    }
+
+    @Override
+    public void onTimeCancel(){
+        onCancel();
+    }
+    @Override
+    public void onDateCancel(){
+        onCancel();
     }
 
 }

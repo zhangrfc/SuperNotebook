@@ -44,7 +44,16 @@ public class EditActivity extends ActionBarActivity{
         date = (EditText)findViewById(R.id.item_date);
         location = (EditText)findViewById(R.id.item_location);
         detail = (EditText)findViewById(R.id.item_detail);
-
+        date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    Intent intent = new Intent(view.getContext(), EditDateFragmentActivity.class);
+                    startActivityForResult(intent, REQUEST_DATE);
+                }
+            }
+        });
+        // no conflicts
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
