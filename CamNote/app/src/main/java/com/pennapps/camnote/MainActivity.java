@@ -1,5 +1,6 @@
 package com.pennapps.camnote;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -9,6 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.File;
@@ -43,6 +47,13 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_about) {
+
+            final Dialog sortDialog = new Dialog(this);
+            sortDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            sortDialog.setContentView(R.layout.about_dialog);
+            sortDialog.show();
+        }
 
 
         return super.onOptionsItemSelected(item);

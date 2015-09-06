@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/blue"
+    android:padding="25dp">
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PennAppsXII Project @ 2015"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:textColor="@color/watermelon"/>
+
+
+
+</RelativeLayout>
