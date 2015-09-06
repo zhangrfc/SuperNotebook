@@ -66,8 +66,7 @@
         android:id="@+id/sort_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:src="@drawable/ic_action_calendar"
+        android:src="@drawable/ic_star"
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@id/item_pic"
         android:layout_marginBottom="-30dp"
