@@ -2,19 +2,23 @@ package com.pennapps.camnote;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ShareActionProvider;
 
 /**
  * Created by QingxiaoDong on 9/4/15.
  */
 public class EventDetailActivity extends ActionBarActivity {
     private ShareActionProvider mShareActionProvider;
+
     InstaNotebookDBHelper inDB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +33,7 @@ public class EventDetailActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         MenuItem item = menu.findItem(R.id.action_share);
-        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         return true;
     }
 
@@ -52,7 +56,6 @@ public class EventDetailActivity extends ActionBarActivity {
             startActivity(editIntent);
 
         } else if (id == R.id.action_share) {
-            Log.d("singsing","singsing");
             Cursor rs= inDB.getOneNote(noteID);
             rs.moveToFirst();
             String title_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_TITLE));
