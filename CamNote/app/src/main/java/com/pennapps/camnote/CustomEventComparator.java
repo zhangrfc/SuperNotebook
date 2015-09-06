@@ -28,7 +28,7 @@ public class CustomEventComparator implements Comparator<EventItem> {
         } else {
             double dif = 0;
             if (sortCode == ST_ORDER) {
-                dif = event1.favorite.compareTo(event2.favorite);
+                dif = event2.favorite.compareTo(event1.favorite);
             } else {
                 Log.d(LOG_TAG, "SortCode is undefined!");
             }
