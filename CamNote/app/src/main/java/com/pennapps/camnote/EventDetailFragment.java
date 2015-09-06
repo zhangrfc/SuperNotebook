@@ -2,8 +2,10 @@ package com.pennapps.camnote;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,7 @@ public class EventDetailFragment extends Fragment {
 
         Bundle extras = getActivity().getIntent().getExtras();
         int noteID = extras.getInt("id");
-
+        Log.i("GETIDFROM", Integer.toString(noteID));
         Cursor rs = inDB.getOneNote(noteID);
         rs.moveToFirst();
 
@@ -60,6 +62,11 @@ public class EventDetailFragment extends Fragment {
         location.setText((CharSequence)address_str);
         description.setText((CharSequence)context_str);
 
+        Log.i("PICSTR", picture_str);
+        if (picture_str != null && !picture_str.equals("") && !picture_str.equals("pic")) {
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.item_pic);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picture_str));
+        }
         return rootView;
     }
 

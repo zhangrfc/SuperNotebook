@@ -222,7 +222,7 @@ public class DisplayNote extends ActionBarActivity {
                 if(mydb.insertNote(title.getText().toString(), context.getText().toString(),
                         time.getText().toString(), date.getText().toString(),
                         host.getText().toString(), address.getText().toString(),
-                        picture.getText().toString(), category.getText().toString())){
+                        picture.getText().toString(), category.getText().toString()) != -1){
                     Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
                 }
 

@@ -2,6 +2,7 @@ package com.pennapps.camnote;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -52,6 +53,7 @@ public class CamPaintActivity extends ActionBarActivity {
     private Paint mPaint;
     private Stack<String> strStack;
     private HashMap<String, String> idStrHashMap;
+    private ArrayList<String> strList;
 
     public class DrawingView extends View {
         private Bitmap mBitmap;
@@ -327,7 +329,16 @@ public class CamPaintActivity extends ActionBarActivity {
         }
 
         public void resetRecogDone() {
+            // Reset done flag
             isRecDone = false;
+            // Reset canvas
+            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        }
+
+        public String getPhotoPath() {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) return "";
+            return (String) extras.get("IMAGE");
         }
 
     }
@@ -351,9 +362,10 @@ public class CamPaintActivity extends ActionBarActivity {
         //actionBar.setTitle("Please choose the title region");
         // Set Menu actions
         idStrHashMap = new HashMap<String, String>();
-        strStack = new Stack<String>();
-        strStack.push("Content");
-        strStack.push("Title");
+        strList = new ArrayList<String>();
+        strList.add("Title");
+        strList.add("Content");
+        strStack = createStackByList(strList);
         setActionBarTitle(strStack.peek());
         //setMenuActions(strList, actionBar);
         // actionBar.hide();
@@ -368,16 +380,26 @@ public class CamPaintActivity extends ActionBarActivity {
         }
     }
 
+    private Stack<String> createStackByList(ArrayList<String> strList) {
+        Stack<String> strStack = new Stack<String>();
+        for (int i = strList.size() - 1; i>=0; --i) {
+            strStack.push(strList.get(i));
+        }
+        return strStack;
+    }
+
     private void setActionBarTitle(String title) {
         getSupportActionBar().setTitle("Pick " + title);
     }
 
-    private void testIfRecogFinished() {
+    private boolean testIfRecogFinished() {
         // Test if all elements finished
         if (strStack.empty()) {
             // Finish recognizing all texts.
             // Open next activity
             Toast.makeText(this, "JUMP TO NEXT ACT", Toast.LENGTH_LONG).show();
+            // For DEBUGGING
+            /*
             Iterator it = idStrHashMap.entrySet().iterator();
             while (it.hasNext()) {
                 HashMap.Entry pair = (HashMap.Entry) it.next();
@@ -385,7 +407,27 @@ public class CamPaintActivity extends ActionBarActivity {
                         + ", value: " + pair.getValue().toString());
                 it.remove();
             }
+            */
+            // Insert into DB
+            InstaNotebookDBHelper inDB = new InstaNotebookDBHelper(getApplicationContext());
+            long id = inDB.insertNote(idStrHashMap.get(strList.get(0)), // title
+                    idStrHashMap.get(strList.get(1)), // content
+                    "", // time
+                    "", // date
+                    "", // host
+                    "", // address
+                    dv.getPhotoPath(), // picture
+                    ""); // category
+            // open intent
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", (int)id);
+            Intent intent = new Intent(this, EventDetailActivity.class);
+            intent.putExtras(bundle);
+            finish();
+            startActivity(intent);
+            return true;
         }
+        return false;
     }
 
     private Bitmap resizeBitmap(Bitmap bitmap, Point newSize) {
@@ -468,10 +510,12 @@ public class CamPaintActivity extends ActionBarActivity {
         if (id == R.id.action_skip) {
             String idstr = strStack.pop();
             idStrHashMap.put(idstr, "");
+            dv.resetRecogDone();
             // Decide if finished
-            testIfRecogFinished();
-            // if not, set next title
-            setActionBarTitle(strStack.peek());
+            if (!testIfRecogFinished()) {
+                // if not, set next title
+                setActionBarTitle(strStack.peek());
+            }
         } else if (id == R.id.action_done) {
             // User finished pick
             if (dv.isRecogDone()) {
@@ -485,9 +529,10 @@ public class CamPaintActivity extends ActionBarActivity {
                         Toast.LENGTH_LONG).show();
             }
             // Decide if finished
-            testIfRecogFinished();
-            // if not, set next title
-            setActionBarTitle(strStack.peek());
+            if (!testIfRecogFinished()) {
+                // if not, set next title
+                setActionBarTitle(strStack.peek());
+            }
         }
 
         return super.onOptionsItemSelected(item);
