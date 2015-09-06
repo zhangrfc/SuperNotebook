@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/D:/SuperNotebook/CamNote/libraries/Android-ImageMagick/build/intermediates/bundles/debug/res/values/values.xml -->
+    <!-- From: file:/Users/QingxiaoDong/GitHub/SuperNotebook/CamNote/libraries/Android-ImageMagick/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <string-array name="effects">
         	<item>No Effect</item>

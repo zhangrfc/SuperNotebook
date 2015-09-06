@@ -6,18 +6,12 @@
         android:title="Share"
         android:icon="@drawable/ic_action_share"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_edit"
         android:title="Edit"
         android:icon="@drawable/ic_action_edit"
         android:orderInCategory="1"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_about"
-        android:title="About"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
 
 </menu>

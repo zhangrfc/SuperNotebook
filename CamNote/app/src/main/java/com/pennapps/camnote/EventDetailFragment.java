@@ -2,9 +2,11 @@ package com.pennapps.camnote;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +39,13 @@ public class EventDetailFragment extends Fragment {
         inDB= new InstaNotebookDBHelper(getActivity().getApplicationContext());
 
         Bundle extras = getActivity().getIntent().getExtras();
+<<<<<<< HEAD
         noteID = extras.getInt("id");
 
+=======
+        int noteID = extras.getInt("id");
+        Log.i("GETIDFROM", Integer.toString(noteID));
+>>>>>>> origin/master
         Cursor rs = inDB.getOneNote(noteID);
         rs.moveToFirst();
 
@@ -62,6 +69,11 @@ public class EventDetailFragment extends Fragment {
         location.setText((CharSequence)address_str);
         description.setText((CharSequence)context_str);
 
+        Log.i("PICSTR", picture_str);
+        if (picture_str != null && !picture_str.equals("") && !picture_str.equals("pic")) {
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.item_pic);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picture_str));
+        }
         ImageButton mapImg = (ImageButton) rootView.findViewById(R.id.map_button);
         if(location.getText().toString().equals("")){
             mapImg.setVisibility(View.INVISIBLE);

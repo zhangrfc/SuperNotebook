@@ -60,8 +60,8 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean insertNote (String title, String context, String time, String date,
-                                  String host, String address, String picture, String category) {
+    public long insertNote (String title, String context, String time, String date,
+                               String host, String address, String picture, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(NOTE_COLUMN_TITLE, title);
@@ -72,9 +72,9 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
         contentValues.put(NOTE_COLUMN_ADDRESS, address);
         contentValues.put(NOTE_COLUMN_PICTURE, picture);
         contentValues.put(NOTE_COLUMN_CATEGORY, category);
-        db.insert(NOTE_TABLE_NAME, null, contentValues);
-        return true;
+        return db.insert(NOTE_TABLE_NAME, null, contentValues);
     }
+
 
     public Cursor getOneNote(int id){
         SQLiteDatabase db = this.getReadableDatabase();
