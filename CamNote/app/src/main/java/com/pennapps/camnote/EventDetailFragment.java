@@ -53,7 +53,7 @@ public class EventDetailFragment extends Fragment {
         String host_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_HOST));
         String address_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_ADDRESS));
         String picture_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_PICTURE));
-        String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_CATEGORY));
+        String category_str = rs.getString(rs.getColumnIndex(InstaNotebookDBHelper.NOTE_COLUMN_FAVOURITE));
 
 
         TextView name = (TextView) rootView.findViewById(R.id.item_name);
@@ -78,10 +78,11 @@ public class EventDetailFragment extends Fragment {
         mapImg.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Uri gmmIntetnUri = Uri.parse("geo:0,0?q=" + location.getText().toString());
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntetnUri);
-                mapIntent.setPackage("com.goolge.android.apps.maps");
-                startActivity(mapIntent);
+                Intent intent = null, chooser = null;
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("geo:0,0?q=" + location.getText().toString()));
+                chooser = Intent.createChooser(intent, "Launch Maps");
+                startActivity(chooser);
             }
         });
 

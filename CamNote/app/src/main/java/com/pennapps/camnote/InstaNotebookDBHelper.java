@@ -25,7 +25,7 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
     public static final String NOTE_COLUMN_HOST = "host";
     public static final String NOTE_COLUMN_ADDRESS = "address";
     public static final String NOTE_COLUMN_PICTURE = "picture";
-    public static final String NOTE_COLUMN_CATEGORY = "category";
+    public static final String NOTE_COLUMN_FAVOURITE = "category";
 
     /*Constructor*/
     public InstaNotebookDBHelper(Context context) {
@@ -44,7 +44,7 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
                         NOTE_COLUMN_HOST + " text, " +
                         NOTE_COLUMN_ADDRESS + " text, " +
                         NOTE_COLUMN_PICTURE + " text, " +
-                        NOTE_COLUMN_CATEGORY + " text)"
+                        NOTE_COLUMN_FAVOURITE + " text)"
         );
     }
 
@@ -71,7 +71,7 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
         contentValues.put(NOTE_COLUMN_HOST, host);
         contentValues.put(NOTE_COLUMN_ADDRESS, address);
         contentValues.put(NOTE_COLUMN_PICTURE, picture);
-        contentValues.put(NOTE_COLUMN_CATEGORY, category);
+        contentValues.put(NOTE_COLUMN_FAVOURITE, category);
         return db.insert(NOTE_TABLE_NAME, null, contentValues);
     }
 
@@ -99,7 +99,7 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
         contentValues.put(NOTE_COLUMN_HOST, host);
         contentValues.put(NOTE_COLUMN_ADDRESS, address);
         contentValues.put(NOTE_COLUMN_PICTURE, picture);
-        contentValues.put(NOTE_COLUMN_CATEGORY, category);
+        contentValues.put(NOTE_COLUMN_FAVOURITE, category);
         db.update(NOTE_TABLE_NAME, contentValues, NOTE_COLUMN_ID + " = ?", new String[] { Integer.toString(id) } );
         return true;
     }
@@ -127,7 +127,7 @@ public class InstaNotebookDBHelper extends SQLiteOpenHelper {
             note.NOTE_COLUMN_HOST = res.getString(res.getColumnIndex(NOTE_COLUMN_HOST));
             note.NOTE_COLUMN_ADDRESS = res.getString(res.getColumnIndex(NOTE_COLUMN_ADDRESS));
             note.NOTE_COLUMN_PICTURE = res.getString(res.getColumnIndex(NOTE_COLUMN_PICTURE));
-            note.NOTE_COLUMN_CATEGORY = res.getString(res.getColumnIndex(NOTE_COLUMN_CATEGORY));
+            note.NOTE_COLUMN_FAVOURITE = res.getString(res.getColumnIndex(NOTE_COLUMN_FAVOURITE));
             array_list.add(note);
             res.moveToNext();
         }
