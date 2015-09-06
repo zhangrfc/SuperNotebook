@@ -39,13 +39,10 @@ public class EventDetailFragment extends Fragment {
         inDB= new InstaNotebookDBHelper(getActivity().getApplicationContext());
 
         Bundle extras = getActivity().getIntent().getExtras();
-<<<<<<< HEAD
         noteID = extras.getInt("id");
 
-=======
         int noteID = extras.getInt("id");
         Log.i("GETIDFROM", Integer.toString(noteID));
->>>>>>> origin/master
         Cursor rs = inDB.getOneNote(noteID);
         rs.moveToFirst();
 
