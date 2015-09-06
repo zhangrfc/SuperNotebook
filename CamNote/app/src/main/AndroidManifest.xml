@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".EventDetailActivity"
-            android:label="Cam Note" >
+            android:label="InstaNote" >
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
 
