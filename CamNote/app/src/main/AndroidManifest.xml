@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pennapps.camnote" >
+    package="com.pennapps.instanote" >
 
 
     <permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
@@ -26,7 +26,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.pennapps.instanote.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EventDetailActivity"
+            android:name="com.pennapps.instanote.EventDetailActivity"
             android:label="InstaNote" >
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplayNote"
+            android:name="com.pennapps.instanote.DisplayNote"
             android:label="Add" >
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditActivity"
+            android:name="com.pennapps.instanote.EditActivity"
             android:label="Edit" >
             <intent-filter>
                 <action android:name="android.intent.action.Main" />
@@ -62,11 +62,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CamPaintActivity"
+            android:name="com.pennapps.instanote.CamPaintActivity"
             android:label="@string/title_activity_cam_paint" >
         </activity>
         <activity
-            android:name=".EditDateFragmentActivity"
+            android:name="com.pennapps.instanote.EditDateFragmentActivity"
             android:label="@string/title_activity_edit_date_fragment" >
         </activity>
     </application>

@@ -1,10 +1,9 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
 /**
  * Created by zhangrf on 2015/9/5.
  */
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;

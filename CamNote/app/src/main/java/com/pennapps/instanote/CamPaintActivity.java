@@ -1,4 +1,4 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
 
 import android.content.Context;
@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,11 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,9 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
 import magick.MagickImage;

@@ -1,6 +1,5 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
-import android.app.usage.UsageEvents;
 import android.util.Log;
 
 import java.util.Comparator;

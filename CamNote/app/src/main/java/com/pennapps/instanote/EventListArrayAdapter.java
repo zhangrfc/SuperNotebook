@@ -1,4 +1,4 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;

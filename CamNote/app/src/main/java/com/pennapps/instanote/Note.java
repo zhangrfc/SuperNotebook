@@ -1,4 +1,4 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
 /**
  * Created by zhangrf on 2015/9/5.

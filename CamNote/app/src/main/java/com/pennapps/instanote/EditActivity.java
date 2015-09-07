@@ -1,4 +1,4 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
 import android.content.Intent;
 import android.database.Cursor;

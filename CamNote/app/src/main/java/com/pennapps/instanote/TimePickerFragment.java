@@ -1,4 +1,4 @@
-package com.pennapps.camnote;
+package com.pennapps.instanote;
 
 import android.app.Activity;
 import android.app.Dialog;
