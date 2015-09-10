@@ -1,7 +1,7 @@
 # InstaNote
 
 ## Inspiration
-The inspiration is from the latest version of Google translator. Google translator nowadays has a great feature that can translate everything through the camera. As a user, you do not have to type everything into the mobile in order to get a translation. All you need to do is use your camera and swap the area you want to be translated.
+The inspiration is from the latest version of Google translator. Google translator nowadays has a great feature that can translate everything through the camera. As a user, you do not have to type everything into the mobile in order to get a translation. All you need to do is use your camera and swipe select the area you want to be translated.
 
 ## What it does
 Our InstaNote used a similar strategy but focus more on the note tag side. People nowadays rely more and more on the electronic notes. But many would feel inefficient and waste of time if you have to type everything you have seen actually into your mobile, especially when you have a rather smaller screen. Thus we offer people a solution that you do not have to record everything with typing. Instead of that, with a mobile camera and a few swipes, you have all you want to remember stored inside your cell phone. It actually make people's life much easier. Besides, we added many advanced features such as share and tag in order to make the note more social.
